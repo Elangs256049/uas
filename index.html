@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nike Store - Unleash Your Potential</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          animation: {
+            'bounce-slow': 'bounce 3s infinite',
+            'fade-in': 'fadeIn 1s ease-in-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-all duration-300">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow-md">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center gap-2">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike Logo" class="h-8">
+        <a href="index.html" class="text-2xl font-bold text-red-600 hover:text-red-700">Nike Store</a>
+      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+        <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+        <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+        <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+        <button id="cartButton" class="relative">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </button>
+        <button id="darkToggle" class="text-xl hover:text-red-500">
+          <i class="fas fa-moon dark:hidden"></i>
+          <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+        <div class="flex items-center space-x-3">
+          <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+          <a href="register.html" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition-all duration-300">Register</a>
+        </div>
+      </nav>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 p-4 border-t">
+      <div class="flex flex-col space-y-3">
+        <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+        <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+        <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+        <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+        <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+        <a href="register.html" class="hover:text-red-500 font-medium">Register</a>
+        <div class="flex items-center justify-between pt-2">
+          <button id="mobileCartButton" class="relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="mobileCartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+          </button>
+          <button id="mobileDarkToggle" class="text-xl hover:text-red-500">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shopping Cart Sidebar -->
+  <div id="cartSidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+    <div class="p-4 flex justify-between items-center border-b">
+      <h3 class="text-xl font-bold">Your Cart</h3>
+      <button id="closeCart" class="text-2xl hover:text-red-500">&times;</button>
+    </div>
+    <div id="cartItems" class="p-4 space-y-4">
+      <!-- Cart items will be added here dynamically -->
+      <p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty</p>
+    </div>
+    <div class="p-4 border-t">
+      <div class="flex justify-between font-bold text-lg mb-4">
+        <span>Total:</span>
+        <span id="cartTotal">$600</span>
+      </div>
+      <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full">Checkout</button>
+    </div>
+  </div>
+  <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+  <!-- Main Layout -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 py-6">
+    
+    <!-- Main Content -->
+    <main class="md:col-span-3 space-y-12 animate-fade-in">
+
+      <!-- Hero -->
+      <section id="home" class="relative bg-black rounded-xl overflow-hidden">
+        <img src="https://i.pinimg.com/736x/63/c3/4f/63c34f04312d37e12e939bc2598a9767.jpg" class="w-full h-[350px] md:h-[450px] object-cover opacity-70" alt="Nike Hero">
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white">Unleash Your Potential</h2>
+          <p class="text-white mt-3 text-lg max-w-2xl">Explore the latest Nike sneakers and sportswear designed for peak performance and style.</p>
+          <a href="products.html" class="mt-5 bg-red-600 hover:bg-red-700 text-white py-3 px-8 rounded-full font-medium transition-all duration-300 transform hover:scale-105">Shop Now</a>
+        </div>
+      </section>
+
+      <!-- Featured Categories -->
+      <section>
+        <h3 class="text-2xl font-bold mb-6">Shop by Category</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <a href="products.html?category=men" class="group relative overflow-hidden rounded-xl h-30">
+            <img src="https://i.pinimg.com/736x/98/69/be/9869be49b3ccb3d535d3a7edc154e759.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <h4 class="text-white text-xl font-bold group-hover:text-red-400 transition-colors duration-300">Men</h4>
+            </div>
+          </a>
+          <a href="products.html?category=women" class="group relative overflow-hidden rounded-xl h-30">
+            <img src="https://i.pinimg.com/736x/5b/fc/da/5bfcda4a888ec00a97fd848b59d41ebc.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <h4 class="text-white text-xl font-bold group-hover:text-red-400 transition-colors duration-300">Women</h4>
+            </div>
+          </a>
+          <a href="products.html?category=kids" class="group relative overflow-hidden rounded-xl h-30">
+            <img src="https://i.pinimg.com/736x/79/3b/0c/793b0c91827d7a51c281b98777552b51.jpg" class="w-full h-full object-cover group-hover:scale-90 transition-transform duration-500">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <h4 class="text-white text-xl font-bold group-hover:text-red-400 transition-colors duration-300">Kids</h4>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Products -->
+      <section id="products">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold">Featured Products</h3>
+          <a href="products.html" class="text-red-600 hover:text-red-700 font-medium">View All →</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Product Card 1 -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+            <div class="relative overflow-hidden">
+              <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Nike Air Max TN" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="1" data-name="Nike Air Max TN" data-price="200">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-lg">Nike Air Max TN</h4>
+              <p class="text-gray-500 dark:text-gray-300">$200</p>
+              <div class="flex mt-2 text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">(48)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+            <div class="relative overflow-hidden">
+              <img src="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg" alt="Nike Air Force" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="2" data-name="Nike Air Force 1" data-price="150">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-lg">Nike Air Force 1</h4>
+              <p class="text-gray-500 dark:text-gray-300">$150</p>
+              <div class="flex mt-2 text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">(36)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+            <div class="relative overflow-hidden">
+              <img src="https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg" alt="Nike SB Dunk" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="3" data-name="Nike Air Jordan 1 low OG fragment" data-price="800">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-lg">Nike Air Jordan 1 Low OG fragment</h4>
+              <p class="text-gray-500 dark:text-gray-300">$800</p>
+              <div class="flex mt-2 text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">(62)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter -->
+      <section class="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow">
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2">Stay Updated</h3>
+          <p class="mb-4">Subscribe to our newsletter for the latest releases and exclusive offers.</p>
+          <form class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+            <input type="email" placeholder="Your email" class="flex-grow p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-red-500">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-full transition-all duration-300">Subscribe</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Articles Preview -->
+      <section id="articles">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold">Latest Articles</h3>
+          <a href="articles.html" class="text-red-600 hover:text-red-700 font-medium">Read All →</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition-shadow duration-300">
+            <img src="https://i.pinimg.com/736x/62/35/e7/6235e710d3e3324edbfc2320f4503104.jpg" alt="Sneaker Trends" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h4 class="text-xl font-semibold mb-2">Top 5 Sneakers for Performance in 2025</h4>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">Discover the best Nike shoes for sports and training in 2025. We've compiled a list based on durability, design, and customer reviews.</p>
+            <a href="article-detail.html?id=1" class="text-red-600 hover:text-red-700 font-medium">Read more →</a>
+          </article>
+          <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition-shadow duration-300">
+            <img src="https://i.pinimg.com/736x/64/52/22/645222423605325fc5c2d946f5a316d6.jpg" alt="Running Tips" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h4 class="text-xl font-semibold mb-2">How to Choose the Perfect Running Shoes</h4>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">Our comprehensive guide will help you find the ideal running shoes based on your foot type, running style, and preferred terrain.</p>
+            <a href="article-detail.html?id=2" class="text-red-600 hover:text-red-700 font-medium">Read more →</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="space-y-6">
+      <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl shadow top-24">
+        <h4 class="font-semibold text-lg mb-3">Categories</h4>
+        <ul class="space-y-2">
+          <li><a href="products.html?category=men" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Men's Shoes</a></li>
+          <li><a href="products.html?category=women" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Women's Shoes</a></li>
+          <li><a href="products.html?category=kids" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Kids</a></li>
+          <li><a href="products.html?category=accessories" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Accessories</a></li>
+          <li><a href="products.html?category=new" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> New Releases</a></li>
+          <li><a href="products.html?category=sale" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Sale</a></li>
+        </ul>
+      </div>
+
+      <div class="bg-red-600 text-white p-4 rounded-xl shadow">
+        <h4 class="font-semibold text-lg mb-3">🔥 Hot Deal</h4>
+        <p class="mb-3">Get 20% off on your first order! Use code: <span class="font-bold">NIKE20</span></p>
+        <a href="products.html?category=sale" class="inline-block bg-white text-red-600 py-2 px-4 rounded-full font-medium hover:bg-gray-100 transition-colors">Shop Sale</a>
+      </div>
+
+      <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl shadow">
+        <h4 class="font-semibold text-lg mb-3">Customer Reviews</h4>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+              <i class="fas fa-user text-gray-600"></i>
+            </div>
+            <div>
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <p class="text-sm mt-1">"Best shoes I've ever worn! Super comfortable."</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+              <i class="fas fa-user text-gray-600"></i>
+            </div>
+            <div>
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+              </div>
+              <p class="text-sm mt-1">"Great quality and fast delivery. Will buy again!"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-200 dark:bg-gray-900 py-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h5 class="text-lg font-bold mb-4">Nike Store</h5>
+          <p class="text-gray-600 dark:text-gray-400">The best place to buy authentic Nike products with fast shipping and excellent customer service.</p>
+        </div>
+        <div>
+          <h6 class="font-semibold mb-4">Shop</h6>
+          <ul class="space-y-2">
+            <li><a href="products.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">All Products</a></li>
+            <li><a href="products.html?category=new" class="text-gray-600 dark:text-gray-400 hover:text-red-500">New Arrivals</a></li>
+            <li><a href="products.html?category=sale" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Sale</a></li>
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Gift Cards</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6 class="font-semibold mb-4">Help</h6>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">FAQs</a></li>
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Shipping & Returns</a></li>
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Size Guide</a></li>
+            <li><a href="contact.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6 class="font-semibold mb-4">Connect</h6>
+          <div class="flex space-x-4 text-xl mb-4">
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-youtube"></i></a>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400">Subscribe to our newsletter</p>
+          <form class="mt-2 flex">
+            <input type="email" placeholder="Email" class="p-2 rounded-l border focus:outline-none focus:ring-1 focus:ring-red-500">
+            <button class="bg-red-600 text-white px-3 rounded-r hover:bg-red-700"><i class="fas fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+      <div class="border-t pt-6 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-600 dark:text-gray-400 text-sm">&copy; 2025 Nike Store. All rights reserved.</p>
+        <div class="flex space-x-4 mt-4 md:mt-0">
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Privacy Policy</a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Terms of Service</a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-6 right-6 bg-red-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Dark Mode Toggle
+    const darkToggle = document.getElementById('darkToggle');
+    const mobileDarkToggle = document.getElementById('mobileDarkToggle');
+    
+    const toggleDarkMode = () => {
+      document.documentElement.classList.toggle('dark');
+      // Save preference to localStorage
+      if (document.documentElement.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        localStorage.removeItem('darkMode');
+      }
+    };
+    
+    darkToggle.addEventListener('click', toggleDarkMode);
+    mobileDarkToggle.addEventListener('click', toggleDarkMode);
+    
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Shopping Cart Functionality
+    const cartButton = document.getElementById('cartButton');
+    const mobileCartButton = document.getElementById('mobileCartButton');
+    const closeCart = document.getElementById('closeCart');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartCount = document.getElementById('cartCount');
+    const mobileCartCount = document.getElementById('mobileCartCount');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    let cart = [];
+    
+    const openCart = () => {
+      cartSidebar.classList.remove('translate-x-full');
+      cartOverlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    };
+    
+    const closeCartFunc = () => {
+      cartSidebar.classList.add('translate-x-full');
+      cartOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    };
+    
+    cartButton.addEventListener('click', openCart);
+    mobileCartButton.addEventListener('click', openCart);
+    closeCart.addEventListener('click', closeCartFunc);
+    cartOverlay.addEventListener('click', closeCartFunc);
+    
+    // Add to Cart
+    document.querySelectorAll('.product-add').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const id = e.target.getAttribute('data-id');
+        const name = e.target.getAttribute('data-name');
+        const price = parseFloat(e.target.getAttribute('data-price'));
+        
+        // Check if item already in cart
+        const existingItem = cart.find(item => item.id === id);
+        
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({ id, name, price, quantity: 1 });
+        }
+        
+        updateCart();
+        openCart();
+        
+        // Show added notification
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in';
+        notification.textContent = `${name} added to cart!`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+          setTimeout(() => notification.remove(), 300);
+        }, 2000);
+      });
+    });
+    
+    // Update Cart Display
+    const updateCart = () => {
+      // Update count
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCount.textContent = totalItems;
+      mobileCartCount.textContent = totalItems;
+      
+      // Update items list
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty</p>';
+        cartTotal.textContent = '$0.00';
+        return;
+      }
+      
+      cartItems.innerHTML = cart.map(item => `
+        <div class="flex justify-between items-center border-b pb-3">
+          <div>
+            <h5 class="font-medium">${item.name}</h5>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">$${item.price.toFixed(2)} × ${item.quantity}</p>
+          </div>
+          <div class="flex items-center">
+            <span class="font-medium mr-4">$${(item.price * item.quantity).toFixed(2)}</span>
+            <button class="remove-item text-red-500 hover:text-red-700" data-id="${item.id}">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      
+      // Update total
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      cartTotal.textContent = `$${total.toFixed(2)}`;
+      
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const id = e.target.closest('button').getAttribute('data-id');
+          cart = cart.filter(item => item.id !== id);
+          updateCart();
+        });
+      });
+    };
+    
+    // Back to Top Button
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.remove('opacity-0', 'invisible');
+        backToTopButton.classList.add('opacity-100', 'visible');
+      } else {
+        backToTopButton.classList.remove('opacity-100', 'visible');
+        backToTopButton.classList.add('opacity-0', 'invisible');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

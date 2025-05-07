@@ -202,5 +202,49 @@
   <!-- JavaScript -->
   <script src="main.js"></script>
   <script src="auth.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+      registerForm.addEventListener('submit', function(e) {
+        // The form submission is already handled in auth.js
+        // This is just an additional safeguard
+        const formIsValid = validateRegisterForm();
+        if (formIsValid) {
+          // Form will be processed by auth.js
+          // This is just a backup redirect
+          setTimeout(() => {
+            if (isLoggedIn()) {
+              window.location.href = "index.html";
+            }
+          }, 1000);
+        }
+      });
+    }
+    
+    function validateRegisterForm() {
+      const firstName = document.getElementById("firstName").value;
+      const lastName = document.getElementById("lastName").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const termsCheckbox = document.getElementById("terms");
+      
+      if (!firstName || !lastName || !email || !password || !confirmPassword) {
+        return false;
+      }
+      
+      if (password !== confirmPassword) {
+        return false;
+      }
+      
+      if (termsCheckbox && !termsCheckbox.checked) {
+        return false;
+      }
+      
+      return true;
+    }
+  });
+</script>
 </body>
 </html>

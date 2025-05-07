@@ -338,9 +338,10 @@ if (registerForm) {
 
     if (result.success) {
       showToast("Registration successful! Redirecting to home page...", "success")
+      // Change the timeout to redirect immediately
       setTimeout(() => {
         window.location.href = "index.html"
-      }, 1500)
+      }, 500) // Reduced from 1500ms to 500ms for faster redirect
     } else {
       showToast(result.message, "error")
     }

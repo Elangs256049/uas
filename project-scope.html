@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Scope - Nike Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          animation: {
+            'bounce-slow': 'bounce 3s infinite',
+            'fade-in': 'fadeIn 1s ease-in-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            }
+          },
+          colors: {
+            'nike-red': '#dc2626',
+            'nike-dark': '#1f2937'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-gray-900 text-white transition-all duration-300">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-gray-900 shadow-md">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center gap-2">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike Logo" class="h-8">
+        <a href="index.html" class="text-2xl font-bold text-red-600 hover:text-red-700">Nike Store</a>
+      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+        <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+        <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+        <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+        <button id="cartButton" class="relative">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </button>
+        <div class="flex items-center space-x-3 auth-links">
+          <!-- Will be populated by auth.js -->
+        </div>
+      </nav>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-gray-900 p-4 border-t border-gray-800">
+      <div class="flex flex-col space-y-3">
+        <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+        <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+        <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+        <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+        <div class="mobile-auth-links">
+          <!-- Will be populated by auth.js -->
+        </div>
+        <div class="flex items-center justify-between pt-2">
+          <button id="mobileCartButton" class="relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="mobileCartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Project Scope Content -->
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <!-- Left Column -->
+      <div class="animate-fade-in">
+        <h1 class="text-7xl font-bold text-red-600 leading-none mb-6">PROJECT<br>SCOPE</h1>
+        <div class="space-y-4 mt-8">
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <p class="font-medium">User Interface dibuat</p>
+            <p class="text-red-500 font-bold">from scratch</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <p class="font-medium">HTML + CSS</p>
+            <p class="text-gray-400">Knowledge Required</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg">
+            <p class="font-medium">Javascript add plus value</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column -->
+      <div class="relative animate-fade-in">
+        <div class="border-l-4 border-red-600 pl-6">
+          <h2 class="text-2xl font-bold mb-6">Minimal Requirement</h2>
+          <ol class="space-y-3 list-decimal list-inside">
+            <li class="text-lg">Laman Landing Page</li>
+            <li class="text-lg">Laman Arsip Artikel</li>
+            <li class="text-lg">Laman Detail Artikel</li>
+            <li class="text-lg">Laman Katalog Produk</li>
+            <li class="text-lg">Laman Detail Produk</li>
+            <li class="text-lg">Laman Keranjang</li>
+            <li class="text-lg">Laman Pembayaran</li>
+            <li class="text-lg">Laman History Transaksi</li>
+            <li class="text-lg">Laman Kelola Artikel</li>
+            <li class="text-lg">Laman Kelola Produk</li>
+            <li class="text-lg">Laman Kelola Pengguna</li>
+            <li class="text-lg">Laman Kelola Transaksi</li>
+            <li class="text-lg">Laman Dashboard</li>
+          </ol>
+        </div>
+        
+        <!-- Decorative Lines -->
+        <div class="absolute right-0 bottom-0">
+          <div class="w-24 h-2 bg-red-600 mb-2"></div>
+          <div class="w-24 h-2 bg-red-600 mb-2"></div>
+          <div class="w-24 h-2 bg-red-600"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Implementation Progress -->
+    <div class="mt-20 bg-gray-800 rounded-xl p-8 animate-fade-in">
+      <h2 class="text-2xl font-bold mb-6">Implementation Progress</h2>
+      <div class="space-y-4">
+        <div class="flex items-center">
+          <div class="w-1/4 font-medium">Landing Page</div>
+          <div class="w-3/4 bg-gray-700 rounded-full h-4">
+            <div class="bg-red-600 h-4 rounded-full" style="width: 100%"></div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="w-1/4 font-medium">User Authentication</div>
+          <div class="w-3/4 bg-gray-700 rounded-full h-4">
+            <div class="bg-red-600 h-4 rounded-full" style="width: 90%"></div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="w-1/4 font-medium">Product Catalog</div>
+          <div class="w-3/4 bg-gray-700 rounded-full h-4">
+            <div class="bg-red-600 h-4 rounded-full" style="width: 75%"></div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="w-1/4 font-medium">Shopping Cart</div>
+          <div class="w-3/4 bg-gray-700 rounded-full h-4">
+            <div class="bg-red-600 h-4 rounded-full" style="width: 80%"></div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="w-1/4 font-medium">Checkout Process</div>
+          <div class="w-3/4 bg-gray-700 rounded-full h-4">
+            <div class="bg-red-600 h-4 rounded-full" style="width: 60%"></div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="w-1/4 font-medium">Admin Dashboard</div>
+          <div class="w-3/4 bg-gray-700 rounded-full h-4">
+            <div class="bg-red-600 h-4 rounded-full" style="width: 40%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Technologies Used -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <div class="text-4xl text-red-600 mb-4">
+          <i class="fab fa-html5"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">HTML + CSS</h3>
+        <p class="text-gray-400">Responsive design with Tailwind CSS for modern, mobile-first layouts.</p>
+      </div>
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <div class="text-4xl text-red-600 mb-4">
+          <i class="fab fa-js"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">JavaScript</h3>
+        <p class="text-gray-400">Interactive elements, form validation, and dynamic content loading.</p>
+      </div>
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <div class="text-4xl text-red-600 mb-4">
+          <i class="fas fa-database"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Local Storage</h3>
+        <p class="text-gray-400">Client-side data persistence for cart, user preferences, and authentication.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 py-8 mt-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 text-sm">&copy; 2025 Nike Store. All rights reserved.</p>
+        <div class="flex space-x-4 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-red-500 text-sm">Privacy Policy</a>
+          <a href="#" class="text-gray-400 hover:text-red-500 text-sm">Terms of Service</a>
+          <a href="#" class="text-gray-400 hover:text-red-500 text-sm">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="main.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      // Toggle icon
+      const icon = mobileMenuButton.querySelector('i');
+      if (icon.classList.contains('fa-bars')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+    
+    // Animate on scroll
+    document.addEventListener('DOMContentLoaded', () => {
+      const animateElements = document.querySelectorAll('.animate-fade-in');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100');
+            entry.target.classList.remove('opacity-0', 'translate-y-10');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      animateElements.forEach(element => {
+        element.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700');
+        observer.observe(element);
+      });
+    });
+  </script>
+</body>
+</html>

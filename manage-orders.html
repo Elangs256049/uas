@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manage Orders - Swoosh Society</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        animation: {
+          'bounce-slow': 'bounce 3s infinite',
+          'fade-in': 'fadeIn 1s ease-in-out',
+        },
+        keyframes: {
+          fadeIn: {
+            '0%': { opacity: '0' },
+            '100%': { opacity: '1' },
+          }
+        }
+      }
+    }
+  };
+</script>
+</head>
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-all duration-300">
+
+<!-- Header -->
+<header class="sticky top-0 z-80 bg-white dark:bg-gray-700 shadow-md">
+  <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+    <div class="flex items-center gap-2">
+      <img src="https://i.pinimg.com/736x/43/52/6c/43526ce3156e8c554bdf7d86fac9059b.jpg" alt="Logo" class="h-8"> 
+      <a href="index.html" class="text-2xl font-bold text-red-600 hover:text-red-700">Swoosh Society</a>
+    </div>
+    
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuButton" class="md:hidden text-2xl">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex items-center space-x-6">
+      <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+      <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+      <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+      <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+      <button id="cartButton" class="relative">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+      </button>
+      <button id="darkToggle" class="text-xl hover:text-red-500">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+      </button>
+      <div class="flex items-center space-x-3">
+        <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+        <a href="register.html" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition-all duration-300">Register</a>
+      </div>
+    </nav>
+  </div>
+  
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 p-4 border-t">
+    <div class="flex flex-col space-y-3">
+      <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+      <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+      <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+      <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+      <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+      <a href="register.html" class="hover:text-red-500 font-medium">Register</a>
+      <div class="flex items-center justify-between pt-2">
+        <button id="mobileCartButton" class="relative">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="mobileCartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+        </button>
+        <button id="mobileDarkToggle" class="text-xl hover:text-red-500">
+          <i class="fas fa-moon dark:hidden"></i>
+          <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Page Header -->
+<div class="bg-gray-100 dark:bg-gray-800 py-8">
+  <div class="max-w-7xl mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-2">Manage Orders</h1>
+    <div class="flex items-center text-sm">
+      <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Home</a>
+      <span class="mx-2 text-gray-400">/</span>
+      <a href="admin-dashboard.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Admin</a>
+      <span class="mx-2 text-gray-400">/</span>
+      <span class="text-red-600">Manage Orders</span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Admin Sidebar -->
+    <div class="lg:w-1/4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24">
+        <div class="flex items-center gap-4 pb-6 border-b dark:border-gray-700">
+          <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+            <img src="https://i.pinimg.com/736x/43/52/6c/43526ce3156e8c554bdf7d86fac9059b.jpg" alt="Admin" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <h3 class="font-bold text-lg">Admin Panel</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Order Management</p>
+          </div>
+        </div>
+        
+        <nav class="mt-6">
+          <ul class="space-y-2">
+            <li>
+              <a href="admin-dashboard.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-tachometer-alt text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-products.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-box text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Products</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-orders.html" class="flex items-center gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 font-medium">
+                <i class="fas fa-shopping-bag w-5"></i>
+                <span>Orders</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-users.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-users text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Users</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-transactions.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-money-bill-wave text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Transactions</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-articles.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-newspaper text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Articles</span>
+              </a>
+            </li>
+            <li>
+              <a href="manage-categories.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-tags text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+            <li>
+              <a href="site-settings.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-cog text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+            <li class="border-t dark:border-gray-700 pt-2 mt-2">
+              <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-red-600 hover:text-red-700">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    
+    <!-- Order Management Content -->
+    <div class="lg:w-3/4">
+      <!-- Order Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+            <i class="fas fa-shopping-bag text-xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Total Orders</p>
+            <h3 class="text-2xl font-bold">1,245</h3>
+          </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
+            <i class="fas fa-check-circle text-xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Completed</p>
+            <h3 class="text-2xl font-bold">968</h3>
+          </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400">
+            <i class="fas fa-clock text-xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Processing</p>
+            <h3 class="text-2xl font-bold">182</h3>
+          </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400">
+            <i class="fas fa-times-circle text-xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Cancelled</p>
+            <h3 class="text-2xl font-bold">95</h3>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Action Bar -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="relative">
+              <input type="text" placeholder="Search orders..." class="w-full sm:w-64 pl-10 pr-4 py-2 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+              <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+            <div class="flex gap-2">
+              <select class="p-2 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="refunded">Refunded</option>
+              </select>
+              <select class="p-2 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                <option value="all">All Payment Status</option>
+                <option value="paid">Paid</option>
+                <option value="unpaid">Unpaid</option>
+                <option value="partial">Partially Paid</option>
+                <option value="refunded">Refunded</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button id="exportBtn" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+              <i class="fas fa-file-export mr-2"></i> Export
+            </button>
+            <button id="bulkActionsBtn" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+              <i class="fas fa-cog mr-2"></i> Bulk Actions
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Date Range Picker -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h3 class="font-medium">Filter by Date Range</h3>
+          <div class="flex gap-2">
+            <div class="relative">
+              <input type="date" class="p-2 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <span class="flex items-center text-gray-500">to</span>
+            <div class="relative">
+              <input type="date" class="p-2 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <button class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+              Apply
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Orders List -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-6">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 dark:bg-gray-700 text-left">
+              <tr>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <div class="flex items-center">
+                    <input type="checkbox" id="selectAll" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                    <label for="selectAll" class="sr-only">Select All</label>
+                  </div>
+                </th>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Order ID</th>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Customer</th>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Date</th>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Total</th>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Payment</th>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Status</th>
+                <th class="px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y dark:divide-gray-700">
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7895</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Doe" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">John Doe</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">john.doe@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 20, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$245.00</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Delivered</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800 dark:hover:text-red-400" title="Cancel Order">
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7894</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane Smith" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">Jane Smith</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">jane.smith@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 20, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$189.99</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded">Processing</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800 dark:hover:text-red-400" title="Cancel Order">
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7893</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Robert Johnson" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">Robert Johnson</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">robert.j@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 19, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$320.50</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 text-xs font-medium px-2.5 py-0.5 rounded">Pending</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 text-xs font-medium px-2.5 py-0.5 rounded">Pending</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800 dark:hover:text-red-400" title="Cancel Order">
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7892</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Emily Parker" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">Emily Parker</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">emily.parker@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 19, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$175.00</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300 text-xs font-medium px-2.5 py-0.5 rounded">Shipped</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800 dark:hover:text-red-400" title="Cancel Order">
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7891</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Michael Brown" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">Michael Brown</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">michael.brown@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 18, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$89.99</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 text-xs font-medium px-2.5 py-0.5 rounded">Cancelled</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-800 dark:hover:text-green-400" title="Restore Order">
+                      <i class="fas fa-redo-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7890</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/women/56.jpg" alt="Sarah Williams" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">Sarah Williams</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">sarah.williams@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 18, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$150.00</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 text-xs font-medium px-2.5 py-0.5 rounded">Refunded</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 text-xs font-medium px-2.5 py-0.5 rounded">Returned</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-gray-400 cursor-not-allowed" title="Cancel Order">
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7889</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="David Wilson" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">David Wilson</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">david.wilson@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 17, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$210.75</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Delivered</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800 dark:hover:text-red-400" title="Cancel Order">
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" class="order-checkbox h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">#ORD-7888</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+                      <img src="https://randomuser.me/api/portraits/women/36.jpg" alt="Jennifer Taylor" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-medium">Jennifer Taylor</h4>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">jennifer.taylor@example.com</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">May 17, 2025</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">$95.50</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded">Processing</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400" title="View Order">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200" title="Print Invoice">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-800 dark:hover:text-red-400" title="Cancel Order">
+                      <i class="fas fa-times-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="flex justify-between items-center">
+        <div class="text-sm text-gray-600 dark:text-gray-400">
+          Showing <span class="font-medium">1</span> to <span class="font-medium">8</span> of <span class="font-medium">1,245</span> orders
+        </div>
+        <nav class="inline-flex rounded-md shadow">
+          <a href="#" class="px-3 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Previous</a>
+          <a href="#" class="px-3 py-2 border-t border-b border-gray-300 dark:border-gray-600 bg-red-600 text-white">1</a>
+          <a href="#" class="px-3 py-2 border-t border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">2</a>
+          <a href="#" class="px-3 py-2 border-t border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">3</a>
+          <a href="#" class="px-3 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Next</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Bulk Actions Dropdown (Hidden by default) -->
+<div id="bulkActionsDropdown" class="fixed z-50 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 hidden">
+  <h4 class="font-medium mb-2">Bulk Actions</h4>
+  <div class="space-y-2">
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-check-circle text-green-600 dark:text-green-400 mr-2"></i> Mark as Delivered
+    </button>
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-truck text-blue-600 dark:text-blue-400 mr-2"></i> Mark as Shipped
+    </button>
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-times-circle text-red-600 dark:text-red-400 mr-2"></i> Cancel Orders
+    </button>
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-file-export text-indigo-600 dark:text-indigo-400 mr-2"></i> Export Selected
+    </button>
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-envelope text-purple-600 dark:text-purple-400 mr-2"></i> Send Notifications
+    </button>
+  </div>
+</div>
+
+<!-- Export Options Dropdown (Hidden by default) -->
+<div id="exportDropdown" class="fixed z-50 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 hidden">
+  <h4 class="font-medium mb-2">Export Options</h4>
+  <div class="space-y-2">
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-file-csv text-green-600 dark:text-green-400 mr-2"></i> Export as CSV
+    </button>
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-file-excel text-green-700 dark:text-green-500 mr-2"></i> Export as Excel
+    </button>
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-file-pdf text-red-600 dark:text-red-400 mr-2"></i> Export as PDF
+    </button>
+    <button class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+      <i class="fas fa-print text-blue-600 dark:text-blue-400 mr-2"></i> Print
+    </button>
+  </div>
+</div>
+
+<!-- Order Details Modal (Hidden by default) -->
+<div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-start mb-4">
+      <h3 class="text-xl font-bold">Order Details</h3>
+      <button id="closeOrderModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+        <h4 class="font-medium mb-2">Order Information</h4>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Order ID:</span>
+            <span class="font-medium">#ORD-7895</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Date:</span>
+            <span>May 20, 2025 - 14:32:45</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Status:</span>
+            <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Delivered</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Payment:</span>
+            <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Paid</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+        <h4 class="font-medium mb-2">Customer Information</h4>
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 overflow-hidden flex-shrink-0">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Doe" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <h5 class="font-medium">John Doe</h5>
+            <p class="text-xs text-gray-500 dark:text-gray-400">john.doe@example.com</p>
+          </div>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Phone:</span>
+            <span>+1 (555) 123-4567</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Customer Since:</span>
+            <span>Jan 15, 2023</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Total Orders:</span>
+            <span>24</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+        <h4 class="font-medium mb-2">Payment Information</h4>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Payment Method:</span>
+            <span class="flex items-center">
+              <i class="fab fa-cc-visa text-blue-600 mr-1"></i>
+              Visa **** 4582
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Transaction ID:</span>
+            <span>TRX-78945</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Subtotal:</span>
+            <span>$230.00</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Shipping:</span>
+            <span>$5.00</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400">Tax:</span>
+            <span>$10.00</span>
+          </div>
+          <div class="flex justify-between font-medium">
+            <span>Total:</span>
+            <span>$245.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h4 class="font-medium mb-3">Order Items</h4>
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-gray-100 dark:bg-gray-600 text-left">
+            <tr>
+              <th class="px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-300">Product</th>
+              <th class="px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-300">Price</th>
+              <th class="px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-300">Quantity</th>
+              <th class="px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-300">Total</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y dark:divide-gray-600">
+            <tr>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded bg-gray-200 dark:bg-gray-600 overflow-hidden flex-shrink-0">
+                    <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Nike Air Max TN" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <h5 class="font-medium text-sm">Nike Air Max TN</h5>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Size: 10 | Color: Black</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-sm">$200.00</td>
+              <td class="px-4 py-3 text-sm">1</td>
+              <td class="px-4 py-3 text-sm font-medium">$200.00</td>
+            </tr>
+            
+            <tr>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded bg-gray-200 dark:bg-gray-600 overflow-hidden flex-shrink-0">
+                    <img src="https://i.pinimg.com/736x/43/52/6c/43526ce3156e8c554bdf7d86fac9059b.jpg" alt="Nike Socks" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <h5 class="font-medium text-sm">Nike Dri-FIT Socks</h5>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Size: L | Color: White</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-sm">$15.00</td>
+              <td class="px-4 py-3 text-sm">2</td>
+              <td class="px-4 py-3 text-sm font-medium">$30.00</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-gray-100 dark:bg-gray-600">
+            <tr>
+              <td colspan="3" class="px-4 py-2 text-right text-sm font-medium">Subtotal:</td>
+              <td class="px-4 py-2 text-sm font-medium">$230.00</td>
+            </tr>
+            <tr>
+              <td colspan="3" class="px-4 py-2 text-right text-sm font-medium">Shipping:</td>
+              <td class="px-4 py-2 text-sm font-medium">$5.00</td>
+            </tr>
+            <tr>
+              <td colspan="3" class="px-4 py-2 text-right text-sm font-medium">Tax:</td>
+              <td class="px-4 py-2 text-sm font-medium">$10.00</td>
+            </tr>
+            <tr>
+              <td colspan="3" class="px-4 py-2 text-right text-sm font-medium">Total:</td>
+              <td class="px-4 py-2 text-sm font-medium">$245.00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div>
+        <h4 class="font-medium mb-3">Shipping Information</h4>
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+          <div class="space-y-2 text-sm">
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Shipping Address:</span>
+              <address class="not-italic">
+                John Doe<br>
+                123 Main Street, Apt 4B<br>
+                New York, NY 10001<br>
+                United States
+              </address>
+            </div>
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Shipping Method:</span>
+              <span>Express Shipping (2-3 business days)</span>
+            </div>
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Tracking Number:</span>
+              <a href="#" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">1Z999AA10123456784</a>
+            </div>
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Shipped Date:</span>
+              <span>May 18, 2025</span>
+            </div>
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Delivered Date:</span>
+              <span>May 20, 2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="font-medium mb-3">Billing Information</h4>
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+          <div class="space-y-2 text-sm">
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Billing Address:</span>
+              <address class="not-italic">
+                John Doe<br>
+                123 Main Street, Apt 4B<br>
+                New York, NY 10001<br>
+                United States
+              </address>
+            </div>
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Payment Method:</span>
+              <span class="flex items-center">
+                <i class="fab fa-cc-visa text-blue-600 mr-1"></i>
+                Visa **** 4582
+              </span>
+            </div>
+            <div>
+              <span class="text-gray-500 dark:text-gray-400 block mb-1">Invoice Number:</span>
+              <span>INV-2025-7895</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mb-6">
+      <h4 class="font-medium mb-3">Order Timeline</h4>
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+        <div class="relative">
+          <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600"></div>
+          <div class="space-y-6 relative">
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 flex-shrink-0 z-10">
+                <i class="fas fa-check"></i>
+              </div>
+              <div>
+                <h5 class="text-sm font-medium">Order Delivered</h5>
+                <p class="text-xs text-gray-500 dark:text-gray-400">May 20, 2025 - 10:45 AM</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Package was delivered to the customer</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 flex-shrink-0 z-10">
+                <i class="fas fa-truck"></i>
+              </div>
+              <div>
+                <h5 class="text-sm font-medium">Order Shipped</h5>
+                <p class="text-xs text-gray-500 dark:text-gray-400">May 18, 2025 - 2:30 PM</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Package was shipped via Express Shipping</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0 z-10">
+                <i class="fas fa-box"></i>
+              </div>
+              <div>
+                <h5 class="text-sm font-medium">Order Processed</h5>
+                <p class="text-xs text-gray-500 dark:text-gray-400">May 17, 2025 - 9:15 AM</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Order has been processed and is being prepared for shipment</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 flex-shrink-0 z-10">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div>
+                <h5 class="text-sm font-medium">Payment Confirmed</h5>
+                <p class="text-xs text-gray-500 dark:text-gray-400">May 16, 2025 - 3:45 PM</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Payment has been confirmed and verified</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400 flex-shrink-0 z-10">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <div>
+                <h5 class="text-sm font-medium">Order Placed</h5>
+                <p class="text-xs text-gray-500 dark:text-gray-400">May 16, 2025 - 2:32 PM</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Order #ORD-7895 was placed by the customer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="border-t dark:border-gray-700 pt-4 flex flex-col sm:flex-row justify-between gap-4">
+      <div>
+        <button class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 py-2 px-4 rounded-lg transition-colors text-sm">
+          <i class="fas fa-print mr-1"></i> Print Invoice
+        </button>
+        <button class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 py-2 px-4 rounded-lg transition-colors text-sm ml-2">
+          <i class="fas fa-envelope mr-1"></i> Email Invoice
+        </button>
+      </div>
+      <div class="flex gap-2">
+        <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg transition-colors text-sm">
+          <i class="fas fa-edit mr-1"></i> Edit Order
+        </button>
+        <button class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors text-sm">
+          <i class="fas fa-times-circle mr-1"></i> Cancel Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-200 dark:bg-gray-900 py-8 mt-8">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <h5 class="text-lg font-bold mb-4">Nike Store</h5>
+        <p class="text-gray-600 dark:text-gray-400">The best place to buy authentic Nike products with fast shipping and excellent customer service.</p>
+      </div>
+      <div>
+        <h6 class="font-semibold mb-4">Shop</h6>
+        <ul class="space-y-2">
+          <li><a href="products.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">All Products</a></li>
+          <li><a href="products.html?category=new" class="text-gray-600 dark:text-gray-400 hover:text-red-500">New Arrivals</a></li>
+          <li><a href="products.html?category=sale" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Sale</a></li>
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Gift Cards</a></li>
+        </ul>
+      </div>
+      <div>
+        <h6 class="font-semibold mb-4">Help</h6>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">FAQs</a></li>
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Shipping & Returns</a></li>
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Size Guide</a></li>
+          <li><a href="contact.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h6 class="font-semibold mb-4">Connect</h6>
+        <div class="flex space-x-4 text-xl mb-4">
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400">Subscribe to our newsletter</p>
+        <form class="mt-2 flex">
+          <input type="email" placeholder="Email" class="p-2 rounded-l border focus:outline-none focus:ring-1 focus:ring-red-500">
+          <button class="bg-red-600 text-white px-3 rounded-r hover:bg-red-700"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+    <div class="border-t pt-6 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-gray-600 dark:text-gray-400 text-sm">&copy; 2025 Nike Store. All rights reserved.</p>
+      <div class="flex space-x-4 mt-4 md:mt-0">
+        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Privacy Policy</a>
+        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Terms of Service</a>
+        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="backToTop" class="fixed bottom-6 right-6 bg-red-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- JavaScript -->
+<script>
+  // Mobile Menu Toggle
+  const mobileMenuButton = document.getElementById('mobileMenuButton');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+
+  // Dark Mode Toggle
+  const darkToggle = document.getElementById('darkToggle');
+  const mobileDarkToggle = document.getElementById('mobileDarkToggle');
+  
+  const toggleDarkMode = () => {
+    document.documentElement.classList.toggle('dark');
+    // Save preference to localStorage
+    if (document.documentElement.classList.contains('dark')) {
+      localStorage.setItem('darkMode', 'enabled');
+    } else {
+      localStorage.removeItem('darkMode');
+    }
+  };
+  
+  darkToggle.addEventListener('click', toggleDarkMode);
+  mobileDarkToggle.addEventListener('click', toggleDarkMode);
+  
+  // Check for saved dark mode preference
+  if (localStorage.getItem('darkMode') === 'enabled') {
+    document.documentElement.classList.add('dark');
+  }
+
+  // Back to Top Button
+  const backToTopButton = document.getElementById('backToTop');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      backToTopButton.classList.remove('opacity-0', 'invisible');
+      backToTopButton.classList.add('opacity-100', 'visible');
+    } else {
+      backToTopButton.classList.remove('opacity-100', 'visible');
+      backToTopButton.classList.add('opacity-0', 'invisible');
+    }
+  });
+  
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Select All Checkbox
+  const selectAllCheckbox = document.getElementById('selectAll');
+  const orderCheckboxes = document.querySelectorAll('.order-checkbox');
+  
+  selectAllCheckbox.addEventListener('change', () => {
+    orderCheckboxes.forEach(checkbox => {
+      checkbox.checked = selectAllCheckbox.checked;
+    });
+  });
+  
+  // Update "Select All" checkbox state when individual checkboxes change
+  orderCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', updateSelectAllCheckbox);
+  });
+  
+  function updateSelectAllCheckbox() {
+    const checkedCount = document.querySelectorAll('.order-checkbox:checked').length;
+    selectAllCheckbox.checked = checkedCount === orderCheckboxes.length;
+    selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < orderCheckboxes.length;
+  }
+
+  // Bulk Actions Dropdown
+  const bulkActionsBtn = document.getElementById('bulkActionsBtn');
+  const bulkActionsDropdown = document.getElementById('bulkActionsDropdown');
+  
+  bulkActionsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    
+    // Position the dropdown below the button
+    const buttonRect = bulkActionsBtn.getBoundingClientRect();
+    bulkActionsDropdown.style.top = `${buttonRect.bottom + window.scrollY + 5}px`;
+    bulkActionsDropdown.style.left = `${buttonRect.left + window.scrollX}px`;
+    
+    bulkActionsDropdown.classList.toggle('hidden');
+    
+    // Hide export dropdown if open
+    exportDropdown.classList.add('hidden');
+  });
+  
+  // Export Dropdown
+  const exportBtn = document.getElementById('exportBtn');
+  const exportDropdown = document.getElementById('exportDropdown');
+  
+  exportBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    
+    // Position the dropdown below the button
+    const buttonRect = exportBtn.getBoundingClientRect();
+    exportDropdown.style.top = `${buttonRect.bottom + window.scrollY + 5}px`;
+    exportDropdown.style.left = `${buttonRect.left + window.scrollX}px`;
+    
+    exportDropdown.classList.toggle('hidden');
+    
+    // Hide bulk actions dropdown if open
+    bulkActionsDropdown.classList.add('hidden');
+  });
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!bulkActionsDropdown.contains(e.target) && e.target !== bulkActionsBtn) {
+      bulkActionsDropdown.classList.add('hidden');
+    }
+    
+    if (!exportDropdown.contains(e.target) && e.target !== exportBtn) {
+      exportDropdown.classList.add('hidden');
+    }
+  });
+  
+  // Bulk action buttons
+  const bulkActionButtons = bulkActionsDropdown.querySelectorAll('button');
+  
+  bulkActionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const checkedOrders = document.querySelectorAll('.order-checkbox:checked');
+      
+      if (checkedOrders.length === 0) {
+        alert('Please select at least one order.');
+        return;
+      }
+      
+      const action = button.textContent.trim();
+      alert(`${action} will be applied to ${checkedOrders.length} selected orders.`);
+      
+      bulkActionsDropdown.classList.add('hidden');
+    });
+  });
+  
+  // Export action buttons
+  const exportActionButtons = exportDropdown.querySelectorAll('button');
+  
+  exportActionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const action = button.textContent.trim();
+      alert(`Orders will be exported as ${action.replace('Export as ', '')}.`);
+      
+      exportDropdown.classList.add('hidden');
+    });
+  });
+
+  // Order Details Modal
+  const viewButtons = document.querySelectorAll('.fa-eye');
+  const orderModal = document.getElementById('orderModal');
+  const closeOrderModal = document.getElementById('closeOrderModal');
+  
+  viewButtons.forEach(button => {
+    button.parentElement.addEventListener('click', () => {
+      orderModal.classList.remove('hidden');
+    });
+  });
+  
+  closeOrderModal.addEventListener('click', () => {
+    orderModal.classList.add('hidden');
+  });
+  
+  // Close modal when clicking outside
+  orderModal.addEventListener('click', (e) => {
+    if (e.target === orderModal) {
+      orderModal.classList.add('hidden');
+    }
+  });
+
+  // Search and Filter
+  const searchInput = document.querySelector('input[placeholder="Search orders..."]');
+  const statusFilter = document.querySelector('select:nth-of-type(1)');
+  const paymentStatusFilter = document.querySelector('select:nth-of-type(2)');
+  
+  if (searchInput) {
+    searchInput.addEventListener('input', filterOrders);
+  }
+  
+  if (statusFilter) {
+    statusFilter.addEventListener('change', filterOrders);
+  }
+  
+  if (paymentStatusFilter) {
+    paymentStatusFilter.addEventListener('change', filterOrders);
+  }
+  
+  function filterOrders() {
+    // This would be implemented with actual filtering logic in a real application
+    console.log('Filtering orders...');
+    if (searchInput) console.log('Search term:', searchInput.value);
+    if (statusFilter) console.log('Status:', statusFilter.value);
+    if (paymentStatusFilter) console.log('Payment status:', paymentStatusFilter.value);
+    
+    // Example of how you might filter the orders in a real implementation
+    const rows = document.querySelectorAll('tbody tr');
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    const statusValue = statusFilter ? statusFilter.value : 'all';
+    const paymentStatusValue = paymentStatusFilter ? paymentStatusFilter.value : 'all';
+    
+    rows.forEach(row => {
+      const orderId = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+      const customerName = row.querySelector('h4').textContent.toLowerCase();
+      const customerEmail = row.querySelector('td:nth-child(3) p').textContent.toLowerCase();
+      const statusElement = row.querySelector('td:nth-child(7) span');
+      const status = statusElement ? statusElement.textContent.toLowerCase() : '';
+      const paymentStatusElement = row.querySelector('td:nth-child(6) span');
+      const paymentStatus = paymentStatusElement ? paymentStatusElement.textContent.toLowerCase() : '';
+      
+      const matchesSearch = searchTerm === '' || 
+                           orderId.includes(searchTerm) || 
+                           customerName.includes(searchTerm) || 
+                           customerEmail.includes(searchTerm);
+      
+      const matchesStatus = statusValue === 'all' || 
+                          (statusValue === 'pending' && status.includes('pending')) ||
+                          (statusValue === 'processing' && status.includes('processing')) ||
+                          (statusValue === 'shipped' && status.includes('shipped')) ||
+                          (statusValue === 'delivered' && status.includes('delivered')) ||
+                          (statusValue === 'cancelled' && status.includes('cancelled')) ||
+                          (statusValue === 'refunded' && status.includes('returned'));
+      
+      const matchesPaymentStatus = paymentStatusValue === 'all' || 
+                                 (paymentStatusValue === 'paid' && paymentStatus.includes('paid')) ||
+                                 (paymentStatusValue === 'unpaid' && paymentStatus.includes('pending')) ||
+                                 (paymentStatusValue === 'partial' && paymentStatus.includes('partial')) ||
+                                 (paymentStatusValue === 'refunded' && paymentStatus.includes('refunded'));
+      
+      if (matchesSearch && matchesStatus && matchesPaymentStatus) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+  
+  // Date Range Filter
+  const applyDateFilterButton = document.querySelector('.bg-red-600.hover\\:bg-red-700');
+  
+  if (applyDateFilterButton) {
+    applyDateFilterButton.addEventListener('click', () => {
+      const startDate = document.querySelector('input[type="date"]:nth-of-type(1)').value;
+      const endDate = document.querySelector('input[type="date"]:nth-of-type(2)').value;
+      
+      if (!startDate || !endDate) {
+        alert('Please select both start and end dates.');
+        return;
+      }
+      
+      alert(`Filtering orders from ${startDate} to ${endDate}.`);
+      
+      // In a real application, this would filter the orders based on the date range
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Edit Profile - Swoosh Society</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        animation: {
+          'bounce-slow': 'bounce 3s infinite',
+          'fade-in': 'fadeIn 1s ease-in-out',
+        },
+        keyframes: {
+          fadeIn: {
+            '0%': { opacity: '0' },
+            '100%': { opacity: '1' },
+          }
+        }
+      }
+    }
+  };
+</script>
+</head>
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-all duration-300">
+
+<!-- Header -->
+<header class="sticky top-0 z-80 bg-white dark:bg-gray-700 shadow-md">
+  <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+    <div class="flex items-center gap-2">
+      <img src="https://i.pinimg.com/736x/43/52/6c/43526ce3156e8c554bdf7d86fac9059b.jpg" alt="Logo" class="h-8"> 
+      <a href="index.html" class="text-2xl font-bold text-red-600 hover:text-red-700">Swoosh Society</a>
+    </div>
+    
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuButton" class="md:hidden text-2xl">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex items-center space-x-6">
+      <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+      <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+      <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+      <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+      <button id="cartButton" class="relative">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+      </button>
+      <button id="darkToggle" class="text-xl hover:text-red-500">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+      </button>
+      <div class="flex items-center space-x-3">
+        <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+        <a href="register.html" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition-all duration-300">Register</a>
+      </div>
+    </nav>
+  </div>
+  
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 p-4 border-t">
+    <div class="flex flex-col space-y-3">
+      <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+      <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+      <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+      <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+      <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+      <a href="register.html" class="hover:text-red-500 font-medium">Register</a>
+      <div class="flex items-center justify-between pt-2">
+        <button id="mobileCartButton" class="relative">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="mobileCartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+        </button>
+        <button id="mobileDarkToggle" class="text-xl hover:text-red-500">
+          <i class="fas fa-moon dark:hidden"></i>
+          <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Page Header -->
+<div class="bg-gray-100 dark:bg-gray-800 py-8">
+  <div class="max-w-7xl mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-2">Edit Profile</h1>
+    <div class="flex items-center text-sm">
+      <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Home</a>
+      <span class="mx-2 text-gray-400">/</span>
+      <a href="account.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">My Account</a>
+      <span class="mx-2 text-gray-400">/</span>
+      <span class="text-red-600">Edit Profile</span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Account Sidebar -->
+    <div class="lg:w-1/4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24">
+        <div class="flex items-center gap-4 pb-6 border-b dark:border-gray-700">
+          <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+            <img src="https://i.pinimg.com/736x/43/52/6c/43526ce3156e8c554bdf7d86fac9059b.jpg" alt="Profile" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <h3 class="font-bold text-lg">John Doe</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">john.doe@example.com</p>
+          </div>
+        </div>
+        
+        <nav class="mt-6">
+          <ul class="space-y-2">
+            <li>
+              <a href="account.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-user-circle text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Account Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="profile.html" class="flex items-center gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 font-medium">
+                <i class="fas fa-user-edit w-5"></i>
+                <span>Edit Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="history-transaksi.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-history text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Transaction History</span>
+              </a>
+            </li>
+            <li>
+              <a href="wishlist.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-heart text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Wishlist</span>
+              </a>
+            </li>
+            <li>
+              <a href="address.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-map-marker-alt text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Addresses</span>
+              </a>
+            </li>
+            <li>
+              <a href="payment-methods.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-credit-card text-gray-500 dark:text-gray-400 w-5"></i>
+                <span>Payment Methods</span>
+              </a>
+            </li>
+            <li class="border-t dark:border-gray-700 pt-2 mt-2">
+              <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-red-600 hover:text-red-700">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    
+    <!-- Profile Edit Content -->
+    <div class="lg:w-3/4">
+      <!-- Profile Picture Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">Profile Picture</h2>
+        <div class="flex flex-col sm:flex-row items-center gap-6">
+          <div class="relative">
+            <div class="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+              <img src="https://i.pinimg.com/736x/43/52/6c/43526ce3156e8c554bdf7d86fac9059b.jpg" alt="Profile" class="w-full h-full object-cover" id="profilePreview">
+            </div>
+            <button class="absolute bottom-0 right-0 bg-red-600 text-white rounded-full p-2 shadow-lg hover:bg-red-700 transition-colors">
+              <i class="fas fa-camera"></i>
+            </button>
+          </div>
+          <div class="flex flex-col gap-3 w-full sm:w-auto">
+            <p class="text-gray-600 dark:text-gray-400">Upload a new profile picture. JPG, GIF or PNG. Max size 2MB.</p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <label class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors cursor-pointer text-center">
+                <i class="fas fa-upload mr-2"></i> Upload Photo
+                <input type="file" class="hidden" id="profileUpload" accept="image/*">
+              </label>
+              <button class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 py-2 px-4 rounded-lg transition-colors">
+                <i class="fas fa-trash-alt mr-2"></i> Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Personal Information Form -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">Personal Information</h2>
+        <form id="personalInfoForm">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
+              <input type="text" id="firstName" name="firstName" value="John" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
+              <input type="text" id="lastName" name="lastName" value="Doe" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+              <input type="email" id="email" name="email" value="john.doe@example.com" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+              <input type="tel" id="phone" name="phone" value="+1 (555) 123-4567" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="birthdate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date of Birth</label>
+              <input type="date" id="birthdate" name="birthdate" value="1990-01-15" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="gender" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gender</label>
+              <select id="gender" name="gender" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="mt-6">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg transition-colors">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Additional Information Form -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">Additional Information</h2>
+        <form id="additionalInfoForm">
+          <div class="grid grid-cols-1 gap-6">
+            <div>
+              <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
+              <textarea id="bio" name="bio" rows="4" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">Sneaker enthusiast and collector. Always looking for the latest drops and limited editions.</textarea>
+            </div>
+            <div>
+              <label for="website" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Website</label>
+              <input type="url" id="website" name="website" value="https://johndoe-sneakers.com" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Social Media</label>
+              <div class="space-y-3">
+                <div class="flex items-center">
+                  <div class="w-10 flex-shrink-0 text-center">
+                    <i class="fab fa-instagram text-lg text-pink-600"></i>
+                  </div>
+                  <input type="text" name="instagram" value="@johndoe_kicks" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div class="flex items-center">
+                  <div class="w-10 flex-shrink-0 text-center">
+                    <i class="fab fa-twitter text-lg text-blue-400"></i>
+                  </div>
+                  <input type="text" name="twitter" value="@johndoe" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div class="flex items-center">
+                  <div class="w-10 flex-shrink-0 text-center">
+                    <i class="fab fa-facebook text-lg text-blue-600"></i>
+                  </div>
+                  <input type="text" name="facebook" value="johndoe.sneakers" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg transition-colors">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Change Password Form -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4">Change Password</h2>
+        <form id="changePasswordForm">
+          <div class="grid grid-cols-1 gap-6">
+            <div>
+              <label for="currentPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current Password</label>
+              <input type="password" id="currentPassword" name="currentPassword" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="newPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Password</label>
+              <input type="password" id="newPassword" name="newPassword" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Password must be at least 8 characters long and include a number and a special character.</p>
+            </div>
+            <div>
+              <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm New Password</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" class="w-full p-3 border dark:border-gray-600 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+          </div>
+          
+          <div class="mt-6">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg transition-colors">
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-200 dark:bg-gray-900 py-8 mt-8">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <h5 class="text-lg font-bold mb-4">Nike Store</h5>
+        <p class="text-gray-600 dark:text-gray-400">The best place to buy authentic Nike products with fast shipping and excellent customer service.</p>
+      </div>
+      <div>
+        <h6 class="font-semibold mb-4">Shop</h6>
+        <ul class="space-y-2">
+          <li><a href="products.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">All Products</a></li>
+          <li><a href="products.html?category=new" class="text-gray-600 dark:text-gray-400 hover:text-red-500">New Arrivals</a></li>
+          <li><a href="products.html?category=sale" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Sale</a></li>
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Gift Cards</a></li>
+        </ul>
+      </div>
+      <div>
+        <h6 class="font-semibold mb-4">Help</h6>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">FAQs</a></li>
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Shipping & Returns</a></li>
+          <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Size Guide</a></li>
+          <li><a href="contact.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h6 class="font-semibold mb-4">Connect</h6>
+        <div class="flex space-x-4 text-xl mb-4">
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400">Subscribe to our newsletter</p>
+        <form class="mt-2 flex">
+          <input type="email" placeholder="Email" class="p-2 rounded-l border focus:outline-none focus:ring-1 focus:ring-red-500">
+          <button class="bg-red-600 text-white px-3 rounded-r hover:bg-red-700"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+    <div class="border-t pt-6 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-gray-600 dark:text-gray-400 text-sm">&copy; 2025 Nike Store. All rights reserved.</p>
+      <div class="flex space-x-4 mt-4 md:mt-0">
+        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Privacy Policy</a>
+        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Terms of Service</a>
+        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="backToTop" class="fixed bottom-6 right-6 bg-red-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- JavaScript -->
+<script>
+  // Mobile Menu Toggle
+  const mobileMenuButton = document.getElementById('mobileMenuButton');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+
+  // Dark Mode Toggle
+  const darkToggle = document.getElementById('darkToggle');
+  const mobileDarkToggle = document.getElementById('mobileDarkToggle');
+  
+  const toggleDarkMode = () => {
+    document.documentElement.classList.toggle('dark');
+    // Save preference to localStorage
+    if (document.documentElement.classList.contains('dark')) {
+      localStorage.setItem('darkMode', 'enabled');
+    } else {
+      localStorage.removeItem('darkMode');
+    }
+  };
+  
+  darkToggle.addEventListener('click', toggleDarkMode);
+  mobileDarkToggle.addEventListener('click', toggleDarkMode);
+  
+  // Check for saved dark mode preference
+  if (localStorage.getItem('darkMode') === 'enabled') {
+    document.documentElement.classList.add('dark');
+  }
+
+  // Back to Top Button
+  const backToTopButton = document.getElementById('backToTop');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      backToTopButton.classList.remove('opacity-0', 'invisible');
+      backToTopButton.classList.add('opacity-100', 'visible');
+    } else {
+      backToTopButton.classList.remove('opacity-100', 'visible');
+      backToTopButton.classList.add('opacity-0', 'invisible');
+    }
+  });
+  
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Profile Picture Preview
+  const profileUpload = document.getElementById('profileUpload');
+  const profilePreview = document.getElementById('profilePreview');
+  
+  if (profileUpload) {
+    profileUpload.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          profilePreview.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Form Submission Handlers
+  const personalInfoForm = document.getElementById('personalInfoForm');
+  const additionalInfoForm = document.getElementById('additionalInfoForm');
+  const changePasswordForm = document.getElementById('changePasswordForm');
+  
+  if (personalInfoForm) {
+    personalInfoForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // In a real application, this would send the form data to the server
+      alert('Personal information updated successfully!');
+    });
+  }
+  
+  if (additionalInfoForm) {
+    additionalInfoForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // In a real application, this would send the form data to the server
+      alert('Additional information updated successfully!');
+    });
+  }
+  
+  if (changePasswordForm) {
+    changePasswordForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        alert('Please fill in all password fields.');
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        alert('New password and confirmation do not match.');
+        return;
+      }
+      
+      // Password validation (simple example)
+      const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+      if (!passwordRegex.test(newPassword)) {
+        alert('Password must be at least 8 characters long and include a number and a special character.');
+        return;
+      }
+      
+      // In a real application, this would send the form data to the server
+      alert('Password updated successfully!');
+      
+      // Clear the form
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+    });
+  }
+</script>
+</body>
+</html>

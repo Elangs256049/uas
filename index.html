@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swoosh Society - Unleash Your Potential</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          animation: {
+            'bounce-slow': 'bounce 3s infinite',
+            'fade-in': 'fadeIn 1s ease-in-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-all duration-300">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-80 bg-white dark:bg-gray-700 shadow-md">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center gap-2">
+        <img src="https://i.pinimg.com/736x/43/52/6c/43526ce3156e8c554bdf7d86fac9059b.jpg" alt="Logo" class="h-8"> 
+        <a href="index.html" class="text-2xl font-bold text-red-600 hover:text-red-700">Swoosh Society</a>
+      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+        <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+        <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+        <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+        <button id="cartButton" class="relative">
+          <i class="fas fa-shopping-cart text-xl"></i>
+          <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </button>
+        <button id="darkToggle" class="text-xl hover:text-red-500">
+          <i class="fas fa-moon dark:hidden"></i>
+          <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+        <div class="flex items-center space-x-3">
+          <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+          <a href="register.html" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition-all duration-300">Register</a>
+        </div>
+      </nav>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 p-4 border-t">
+      <div class="flex flex-col space-y-3">
+        <a href="index.html" class="hover:text-red-500 font-medium">Home</a>
+        <a href="products.html" class="hover:text-red-500 font-medium">Products</a>
+        <a href="articles.html" class="hover:text-red-500 font-medium">Articles</a>
+        <a href="contact.html" class="hover:text-red-500 font-medium">Contact</a>
+        <a href="login.html" class="hover:text-red-500 font-medium">Login</a>
+        <a href="register.html" class="hover:text-red-500 font-medium">Register</a>
+        <div class="flex items-center justify-between pt-2">
+          <button id="mobileCartButton" class="relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="mobileCartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+          </button>
+          <button id="mobileDarkToggle" class="text-xl hover:text-red-500">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shopping Cart Sidebar -->
+  <div id="cartSidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+    <div class="p-4 flex justify-between items-center border-b">
+      <h3 class="text-xl font-bold">Your Cart</h3>
+      <button id="closeCart" class="text-2xl hover:text-red-500">&times;</button>
+    </div>
+    <div id="cartItems" class="p-4 space-y-4">
+      <!-- Cart items will be added here dynamically -->
+      <p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty</p>
+    </div>
+    <div class="p-4 border-t">
+      <div class="flex justify-between font-bold text-lg mb-4">
+        <span>Total:</span>
+        <span id="cartTotal">$600</span>
+      </div>
+      <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full">Checkout</button>
+    </div>
+  </div>
+  <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+  <!-- Main Layout -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 py-6">
+    
+    <!-- Main Content -->
+    <main class="md:col-span-3 space-y-12 animate-fade-in">
+
+      <!-- Hero -->
+      <section id="home" class="relative bg-black rounded-xl overflow-hidden">
+        <img src="https://i.pinimg.com/736x/a4/29/2f/a4292fb06e15c8f288d3e3896665d52b.jpg" class="w-full h-[500px] md:h-[400px] object-cover opacity-80" alt="Nike Hero">
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white">Unleash Your Potential</h2>
+          <p class="text-white mt-3 text-lg max-w-2xl">Explore the latest Nike sneakers and sportswear designed for peak performance and style.</p>
+          <a href="products.html" class="mt-5 bg-red-600 hover:bg-red-700 text-white py-3 px-8 rounded-full font-medium transition-all duration-300 transform hover:scale-105">Shop Now</a>
+        </div>
+      </section>
+
+      <!-- Featured Categories -->
+      <section>
+        <h3 class="text-2xl font-bold mb-6">Shop by Category</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <a href="products.html?category=men" class="group relative overflow-hidden rounded-xl h-30">
+            <img src="https://i.pinimg.com/736x/98/69/be/9869be49b3ccb3d535d3a7edc154e759.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <h4 class="text-white text-xl font-bold group-hover:text-red-400 transition-colors duration-300">Men</h4>
+            </div>
+          </a>
+          <a href="products.html?category=women" class="group relative overflow-hidden rounded-xl h-30">
+            <img src="https://i.pinimg.com/736x/5b/fc/da/5bfcda4a888ec00a97fd848b59d41ebc.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <h4 class="text-white text-xl font-bold group-hover:text-red-400 transition-colors duration-300">Women</h4>
+            </div>
+          </a>
+          <a href="products.html?category=kids" class="group relative overflow-hidden rounded-xl h-30">
+            <img src="https://i.pinimg.com/736x/79/3b/0c/793b0c91827d7a51c281b98777552b51.jpg" class="w-full h-full object-cover group-hover:scale-90 transition-transform duration-500">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+              <h4 class="text-white text-xl font-bold group-hover:text-red-400 transition-colors duration-300">Kids</h4>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Products -->
+      <section id="products">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold">Featured Products</h3>
+          <a href="products.html" class="text-red-600 hover:text-red-700 font-medium">View All →</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Product Card 1 -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+            <div class="relative overflow-hidden">
+              <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Nike Air Max TN" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="1" data-name="Nike Air Max TN" data-price="200">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-lg">Nike Air Max TN</h4>
+              <p class="text-gray-500 dark:text-gray-300">$200</p>
+              <div class="flex mt-2 text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">(48)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+            <div class="relative overflow-hidden">
+              <img src="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg" alt="Nike Air Force" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="2" data-name="Nike Air Force 1" data-price="150">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-lg">Nike Air Force 1</h4>
+              <p class="text-gray-500 dark:text-gray-300">$150</p>
+              <div class="flex mt-2 text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">(36)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+            <div class="relative overflow-hidden">
+              <img src="https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg" alt="Nike SB Dunk" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="3" data-name="Nike Air Jordan 1 low OG fragment" data-price="800">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-lg">Nike Air Jordan 1 Low OG fragment</h4>
+              <p class="text-gray-500 dark:text-gray-300">$800</p>
+              <div class="flex mt-2 text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">(62)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+  
+  <!-- Product Detail View -->
+<div id="productDetailView" class="hidden">
+  <!-- Back to Catalog Button -->
+  <div class="mb-6">
+    <button id="backToCatalogBtn" class="flex items-center text-red-600 hover:text-red-700 font-medium">
+      <i class="fas fa-arrow-left mr-2"></i> Back to Catalog
+    </button>
+  </div>
+  
+  <!-- Product Detail Content -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+      <!-- Product Images -->
+      <div class="space-y-4">
+        <!-- Main Image -->
+        <div class="relative h-80 md:h-96 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+          <img id="productMainImage" src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Product" class="w-full h-full object-contain">
+          <span id="productBadge" class="absolute top-4 left-4 bg-red-600 text-white text-xs px-3 py-1 rounded-full">NEW</span>
+        </div>
+        
+        <!-- Thumbnail Images -->
+        <div class="flex space-x-2 overflow-x-auto pb-2">
+          <button class="thumbnail-btn active w-20 h-20 rounded-md overflow-hidden border-2 border-red-600 flex-shrink-0">
+            <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Thumbnail 1" class="w-full h-full object-cover">
+          </button>
+          <button class="thumbnail-btn w-20 h-20 rounded-md overflow-hidden border-2 border-transparent hover:border-red-600 flex-shrink-0">
+            <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Thumbnail 2" class="w-full h-full object-cover">
+          </button>
+          <button class="thumbnail-btn w-20 h-20 rounded-md overflow-hidden border-2 border-transparent hover:border-red-600 flex-shrink-0">
+            <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Thumbnail 3" class="w-full h-full object-cover">
+          </button>
+          <button class="thumbnail-btn w-20 h-20 rounded-md overflow-hidden border-2 border-transparent hover:border-red-600 flex-shrink-0">
+            <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Thumbnail 4" class="w-full h-full object-cover">
+          </button>
+        </div>
+      </div>
+      
+      <!-- Product Info -->
+      <div class="space-y-6">
+        <div>
+          <h1 id="productTitle" class="text-2xl md:text-3xl font-bold">Nike Air Max TN</h1>
+          <p id="productCategory" class="text-gray-500 dark:text-gray-400">Men's Shoes</p>
+        </div>
+        
+        <!-- Price -->
+        <div class="flex items-end gap-2">
+          <span id="productPrice" class="text-2xl font-bold">$200.00</span>
+          <span id="productOldPrice" class="text-gray-500 dark:text-gray-400 line-through hidden">$250.00</span>
+          <span id="productDiscount" class="bg-green-600 text-white text-xs px-2 py-1 rounded-full ml-2 hidden">20% OFF</span>
+        </div>
+        
+        <!-- Rating -->
+        <div class="flex items-center">
+          <div class="flex text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">4.5 (48 reviews)</span>
+        </div>
+        
+        <!-- Description -->
+        <div>
+          <h3 class="font-semibold mb-2">Description</h3>
+          <p id="productDescription" class="text-gray-700 dark:text-gray-300">
+            The Nike Air Max TN, also known as the Nike Air Max Plus, features a gradient mesh upper with wavy TPU overlays for a distinctive look. The Tuned Air technology provides exceptional cushioning and stability for all-day comfort.
+          </p>
+        </div>
+        
+        <!-- Color Selection -->
+        <div>
+          <h3 class="font-semibold mb-2">Color</h3>
+          <div class="flex flex-wrap gap-2">
+            <button class="color-option w-8 h-8 rounded-full bg-black border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600 active"></button>
+            <button class="color-option w-8 h-8 rounded-full bg-blue-600 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"></button>
+            <button class="color-option w-8 h-8 rounded-full bg-red-600 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"></button>
+            <button class="color-option w-8 h-8 rounded-full bg-gray-300 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"></button>
+          </div>
+        </div>
+        
+        <!-- Size Selection -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-semibold">Size</h3>
+            <button class="text-red-600 text-sm hover:underline">Size Guide</button>
+          </div>
+          <div class="grid grid-cols-4 gap-2">
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">US 7</button>
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">US 8</button>
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 active">US 9</button>
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">US 10</button>
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">US 11</button>
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">US 12</button>
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 opacity-50 cursor-not-allowed">US 13</button>
+            <button class="size-option py-2 border border-gray-300 dark:border-gray-600 rounded hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">US 14</button>
+          </div>
+        </div>
+        
+        <!-- Quantity and Add to Cart -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded w-32">
+            <button id="decreaseQuantity" class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">-</button>
+            <input type="number" id="productQuantity" value="1" min="1" max="10" class="w-full text-center border-none focus:outline-none bg-transparent">
+            <button id="increaseQuantity" class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">+</button>
+          </div>
+          <button id="addToCartBtn" class="flex-grow bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+            <i class="fas fa-shopping-cart"></i>
+            Add to Cart
+          </button>
+          <button id="addToWishlistBtn" class="w-12 h-12 flex items-center justify-center border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <i class="far fa-heart"></i>
+          </button>
+        </div>
+        
+        <!-- Shipping Info -->
+        <div class="border-t pt-4">
+          <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 mb-2">
+            <i class="fas fa-truck"></i>
+            <span>Free shipping on orders over $100</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <i class="fas fa-undo"></i>
+            <span>Free 30-day returns</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Product Tabs -->
+    <div class="border-t border-gray-200 dark:border-gray-700 mt-8">
+      <div class="flex border-b border-gray-200 dark:border-gray-700">
+        <button class="product-tab-btn active px-6 py-3 border-b-2 border-red-600 font-medium" data-tab="details">Details</button>
+        <button class="product-tab-btn px-6 py-3 border-b-2 border-transparent hover:text-red-600 font-medium" data-tab="specifications">Specifications</button>
+        <button class="product-tab-btn px-6 py-3 border-b-2 border-transparent hover:text-red-600 font-medium" data-tab="reviews">Reviews</button>
+      </div>
+      
+      <!-- Tab Content -->
+      <div class="p-6">
+        <!-- Details Tab -->
+        <div id="details-tab" class="product-tab-content">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-xl font-semibold mb-4">Product Features</h3>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                  <span>Mesh upper with TPU overlays for breathability and support</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                  <span>Tuned Air technology provides exceptional cushioning</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                  <span>Padded collar and tongue for comfort</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                  <span>Rubber outsole for durability and traction</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                  <span>Reflective details for visibility in low light</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold mb-4">The Nike Air Max Story</h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-4">
+                The revolutionary Air-Sole unit made its way into Nike footwear in 1978. In 1987, the Nike Air Max 1 debuted with visible air in its heel, allowing fans more than just the feel of Air-Sole comfort—suddenly they could see it.
+              </p>
+              <p class="text-gray-700 dark:text-gray-300">
+                The Nike Air Max TN, also known as the Air Max Plus, was introduced in 1998 and featured Tuned Air technology, which offered varying pressure in the Air-Sole units for enhanced stability and cushioning.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Specifications Tab -->
+        <div id="specifications-tab" class="product-tab-content hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Style</td>
+                  <td class="py-3 px-4">CW7575-001</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Colorway</td>
+                  <td class="py-3 px-4">Black/White/University Red</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Materials</td>
+                  <td class="py-3 px-4">Mesh, Synthetic, Rubber</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Technology</td>
+                  <td class="py-3 px-4">Tuned Air, Max Air</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Closure</td>
+                  <td class="py-3 px-4">Lace-up</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Heel Height</td>
+                  <td class="py-3 px-4">1.5 inches</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Weight</td>
+                  <td class="py-3 px-4">11.2 oz (Men's size 10)</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 bg-gray-50 dark:bg-gray-800 font-medium">Release Date</td>
+                  <td class="py-3 px-4">January 2025</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Reviews Tab -->
+        <div id="reviews-tab" class="product-tab-content hidden">
+          <div class="mb-6">
+            <div class="flex items-center gap-4">
+              <div>
+                <div class="text-3xl font-bold">4.5</div>
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Based on 48 reviews</div>
+              </div>
+              <div class="flex-grow">
+                <div class="flex items-center mb-1">
+                  <span class="text-sm w-8">5★</span>
+                  <div class="flex-grow h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="bg-yellow-400 h-full rounded-full" style="width: 75%"></div>
+                  </div>
+                  <span class="text-sm w-8 text-right">36</span>
+                </div>
+                <div class="flex items-center mb-1">
+                  <span class="text-sm w-8">4★</span>
+                  <div class="flex-grow h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="bg-yellow-400 h-full rounded-full" style="width: 15%"></div>
+                  </div>
+                  <span class="text-sm w-8 text-right">7</span>
+                </div>
+                <div class="flex items-center mb-1">
+                  <span class="text-sm w-8">3★</span>
+                  <div class="flex-grow h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="bg-yellow-400 h-full rounded-full" style="width: 6%"></div>
+                  </div>
+                  <span class="text-sm w-8 text-right">3</span>
+                </div>
+                <div class="flex items-center mb-1">
+                  <span class="text-sm w-8">2★</span>
+                  <div class="flex-grow h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="bg-yellow-400 h-full rounded-full" style="width: 2%"></div>
+                  </div>
+                  <span class="text-sm w-8 text-right">1</span>
+                </div>
+                <div class="flex items-center">
+                  <span class="text-sm w-8">1★</span>
+                  <div class="flex-grow h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="bg-yellow-400 h-full rounded-full" style="width: 2%"></div>
+                  </div>
+                  <span class="text-sm w-8 text-right">1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Review List -->
+          <div class="space-y-6">
+            <!-- Review 1 -->
+            <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <div class="flex text-yellow-400">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <h4 class="font-bold mt-1">Best Air Max Ever!</h4>
+                </div>
+                <span class="text-sm text-gray-500 dark:text-gray-400">March 15, 2025</span>
+              </div>
+              <p class="text-sm mb-2">By Michael T.</p>
+              <p class="text-gray-700 dark:text-gray-300">
+                I've been collecting Air Max shoes for years, and these are by far my favorite. The comfort is unmatched, and they look amazing with everything. Highly recommend!
+              </p>
+              <div class="flex gap-2 mt-3">
+                <span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">Comfort</span>
+                <span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">Style</span>
+                <span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">Durability</span>
+              </div>
+            </div>
+            
+            <!-- Review 2 -->
+            <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <div class="flex text-yellow-400">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                  <h4 class="font-bold mt-1">Great shoes, but run small</h4>
+                </div>
+                <span class="text-sm text-gray-500 dark:text-gray-400">March 10, 2025</span>
+              </div>
+              <p class="text-sm mb-2">By Jessica R.</p>
+              <p class="text-gray-700 dark:text-gray-300">
+                Love these shoes! They look amazing and are very comfortable. My only issue is that they run a bit small. I'd recommend going up half a size from your usual Nike size.
+              </p>
+              <div class="flex gap-2 mt-3">
+                <span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">Sizing</span>
+                <span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">Style</span>
+              </div>
+            </div>
+            
+            <!-- Review 3 -->
+            <div>
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <div class="flex text-yellow-400">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </div>
+                  <h4 class="font-bold mt-1">Perfect for everyday wear</h4>
+                </div>
+                <span class="text-sm text-gray-500 dark:text-gray-400">March 5, 2025</span>
+              </div>
+              <p class="text-sm mb-2">By David W.</p>
+              <p class="text-gray-700 dark:text-gray-300">
+                These have become my go-to shoes for everyday wear. They're comfortable enough for all-day use and stylish enough to wear with almost anything. The air cushioning is perfect for my commute.
+              </p>
+              <div class="flex gap-2 mt-3">
+                <span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">Comfort</span>
+                <span class="bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded">Versatility</span>
+              </div>
+            </div>
+            
+            <!-- Load More Reviews Button -->
+            <button class="w-full py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              Load More Reviews
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Related Products -->
+    <div class="border-t border-gray-200 dark:border-gray-700 p-6">
+      <h3 class="text-xl font-bold mb-4">You May Also Like</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- Related Product 1 -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden group hover:shadow-md transition-shadow">
+          <div class="relative h-40 overflow-hidden">
+            <img src="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg" alt="Related Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-3">
+            <h4 class="font-medium text-sm">Nike Air Force 1</h4>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">$150</p>
+          </div>
+        </div>
+        
+        <!-- Related Product 2 -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden group hover:shadow-md transition-shadow">
+          <div class="relative h-40 overflow-hidden">
+            <img src="https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg" alt="Related Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-3">
+            <h4 class="font-medium text-sm">Nike Air Jordan 1 Low OG</h4>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">$800</p>
+          </div>
+        </div>
+        
+        <!-- Related Product 3 -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden group hover:shadow-md transition-shadow">
+          <div class="relative h-40 overflow-hidden">
+            <img src="https://i.pinimg.com/736x/bd/c8/90/bdc8901d458b0c52fed415e9e412067b.jpg" alt="Related Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-3">
+            <h4 class="font-medium text-sm">Nike ZoomX Vaporfly</h4>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">$180</p>
+          </div>
+        </div>
+        
+        <!-- Related Product 4 -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden group hover:shadow-md transition-shadow">
+          <div class="relative h-40 overflow-hidden">
+            <img src="https://i.pinimg.com/736x/22/6e/74/226e74bb557d4b491b0b090c8f1a678e.jpg" alt="Related Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-3">
+            <h4 class="font-medium text-sm">Nike Dunk Low</h4>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">$120</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <!-- Load More Button -->
+  <div class="text-center mt-8">
+    <button id="load-more-products" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white py-3 px-6 rounded-lg transition-colors">
+      Load More Products
+    </button>
+  </div>
+</section>
+
+      <!-- Newsletter -->
+      <section class="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow">
+        <div class="text-center">
+          <h3 class="text-2xl font-bold mb-2">Stay Updated</h3>
+          <p class="mb-4">Subscribe to our newsletter for the latest releases and exclusive offers.</p>
+          <form class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+            <input type="email" placeholder="Your email" class="flex-grow p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-red-500">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-full transition-all duration-300">Subscribe</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Articles Preview -->
+      <section id="articles">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold">Latest Articles</h3>
+          <a href="articles.html" class="text-red-600 hover:text-red-700 font-medium">Read All →</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition-shadow duration-300">
+            <img src="https://i.pinimg.com/736x/62/35/e7/6235e710d3e3324edbfc2320f4503104.jpg" alt="Sneaker Trends" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h4 class="text-xl font-semibold mb-2">Top 5 Sneakers for Performance in 2025</h4>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">Discover the best Nike shoes for sports and training in 2025. We've compiled a list based on durability, design, and customer reviews.</p>
+            <a href="article-detail.html?id=1" class="text-red-600 hover:text-red-700 font-medium">Read more →</a>
+          </article>
+          <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition-shadow duration-300">
+            <img src="https://i.pinimg.com/736x/64/52/22/645222423605325fc5c2d946f5a316d6.jpg" alt="Running Tips" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h4 class="text-xl font-semibold mb-2">How to Choose the Perfect Running Shoes</h4>
+            <p class="text-gray-700 dark:text-gray-300 mb-3">Our comprehensive guide will help you find the ideal running shoes based on your foot type, running style, and preferred terrain.</p>
+            <a href="article-detail.html?id=2" class="text-red-600 hover:text-red-700 font-medium">Read more →</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- Complete Article Archive -->
+      <section id="article-archive" class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold">Nike Article Archive</h3>
+          <div class="flex items-center space-x-4">
+            <button id="viewArchiveBtn" class="text-red-600 hover:text-red-700 font-medium">View Archive</button>
+            <button id="viewDetailBtn" class="text-gray-500 hover:text-red-700 font-medium">View Detail</button>
+          </div>
+        </div>
+        
+        <!-- Archive View -->
+        <div id="archiveView">
+          <!-- Archive Filter -->
+          <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6">
+            <div class="flex flex-col md:flex-row gap-4">
+              <div class="flex-1">
+                <label for="article-search" class="block text-sm font-medium mb-1">Search Articles</label>
+                <input type="text" id="article-search" placeholder="Search by keyword..." class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+              </div>
+              <div>
+                <label for="article-category" class="block text-sm font-medium mb-1">Category</label>
+                <select id="article-category" class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                  <option value="">All Categories</option>
+                  <option value="sneakers">Sneakers</option>
+                  <option value="running">Running</option>
+                  <option value="basketball">Basketball</option>
+                  <option value="training">Training</option>
+                  <option value="lifestyle">Lifestyle</option>
+                </select>
+              </div>
+              <div>
+                <label for="article-sort" class="block text-sm font-medium mb-1">Sort By</label>
+                <select id="article-sort" class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="popular">Most Popular</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Articles Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Article 1 -->
+            <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+              <div class="relative overflow-hidden h-48">
+                <img src="https://i.pinimg.com/736x/62/35/e7/6235e710d3e3324edbfc2320f4503104.jpg" alt="Nike Air Max History" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold px-2 py-1">HISTORY</div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <span>March 15, 2025</span>
+                  <span>5 min read</span>
+                </div>
+                <h4 class="font-semibold text-lg mb-2">The Evolution of Nike Air Max: 1987 to 2025</h4>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">Explore the revolutionary journey of Nike's iconic Air Max line, from the original Air Max 1 to the latest innovations that continue to push boundaries.</p>
+                <button class="text-red-600 hover:text-red-700 font-medium text-sm article-detail-btn" data-article-id="1">Read full article →</button>
+              </div>
+            </article>
+            
+            <!-- Article 2 -->
+            <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+              <div class="relative overflow-hidden h-48">
+                <img src="https://i.pinimg.com/736x/64/52/22/645222423605325fc5c2d946f5a316d6.jpg" alt="Running Techniques" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute top-0 left-0 bg-blue-600 text-white text-xs font-bold px-2 py-1">TRAINING</div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <span>March 10, 2025</span>
+                  <span>8 min read</span>
+                </div>
+                <h4 class="font-semibold text-lg mb-2">Advanced Running Techniques for Marathon Training</h4>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">Professional trainers share their top techniques for improving your marathon performance, from breathing methods to stride optimization.</p>
+                <button class="text-red-600 hover:text-red-700 font-medium text-sm article-detail-btn" data-article-id="2">Read full article →</button>
+              </div>
+            </article>
+            
+            <!-- Article 3 -->
+            <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+              <div class="relative overflow-hidden h-48">
+                <img src="https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg" alt="Jordan Legacy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute top-0 left-0 bg-green-600 text-white text-xs font-bold px-2 py-1">CULTURE</div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <span>March 5, 2025</span>
+                  <span>6 min read</span>
+                </div>
+                <h4 class="font-semibold text-lg mb-2">The Cultural Impact of Air Jordan Beyond Basketball</h4>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">How Michael Jordan's signature line transcended sports to become a global cultural phenomenon influencing fashion, music, and art worldwide.</p>
+                <button class="text-red-600 hover:text-red-700 font-medium text-sm article-detail-btn" data-article-id="3">Read full article →</button>
+              </div>
+            </article>
+            
+            <!-- Article 4 -->
+            <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+              <div class="relative overflow-hidden h-48">
+                <img src="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg" alt="Sustainable Nike" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute top-0 left-0 bg-teal-600 text-white text-xs font-bold px-2 py-1">SUSTAINABILITY</div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <span>February 28, 2025</span>
+                  <span>4 min read</span>
+                </div>
+                <h4 class="font-semibold text-lg mb-2">Nike's Commitment to Sustainable Manufacturing</h4>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">Discover how Nike is revolutionizing the industry with eco-friendly materials, reduced carbon footprint, and innovative recycling programs.</p>
+                <button class="text-red-600 hover:text-red-700 font-medium text-sm article-detail-btn" data-article-id="4">Read full article →</button>
+              </div>
+            </article>
+            
+            <!-- Article 5 -->
+            <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+              <div class="relative overflow-hidden h-48">
+                <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Basketball Shoes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute top-0 left-0 bg-purple-600 text-white text-xs font-bold px-2 py-1">BASKETBALL</div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <span>February 20, 2025</span>
+                  <span>7 min read</span>
+                </div>
+                <h4 class="font-semibold text-lg mb-2">How to Choose the Perfect Basketball Shoes</h4>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">Expert advice on selecting basketball shoes based on your playing style, position, and foot type to maximize performance and prevent injuries.</p>
+                <button class="text-red-600 hover:text-red-700 font-medium text-sm article-detail-btn" data-article-id="5">Read full article →</button>
+              </div>
+            </article>
+            
+            <!-- Article 6 -->
+            <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+              <div class="relative overflow-hidden h-48">
+                <img src="https://i.pinimg.com/736x/98/69/be/9869be49b3ccb3d535d3a7edc154e759.jpg" alt="Nike Technology" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute top-0 left-0 bg-orange-600 text-white text-xs font-bold px-2 py-1">TECHNOLOGY</div>
+              </div>
+              <div class="p-4">
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  <span>February 15, 2025</span>
+                  <span>5 min read</span>
+                </div>
+                <h4 class="font-semibold text-lg mb-2">The Science Behind Nike's Revolutionary Flyknit Technology</h4>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">An in-depth look at how Nike's Flyknit technology is engineered to provide superior fit, reduce waste, and enhance athletic performance.</p>
+                <button class="text-red-600 hover:text-red-700 font-medium text-sm article-detail-btn" data-article-id="6">Read full article →</button>
+              </div>
+            </article>
+          </div>
+          
+          <!-- Pagination -->
+          <div class="flex justify-center mt-8">
+            <nav class="inline-flex rounded-md shadow">
+              <a href="#" class="px-3 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Previous</a>
+              <a href="#" class="px-3 py-2 border-t border-b border-gray-300 dark:border-gray-600 bg-red-600 text-white">1</a>
+              <a href="#" class="px-3 py-2 border-t border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">2</a>
+              <a href="#" class="px-3 py-2 border-t border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">3</a>
+              <a href="#" class="px-3 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">Next</a>
+            </nav>
+          </div>
+        </div>
+        
+        <!-- Article Detail View -->
+        <div id="detailView" class="hidden">
+          <!-- Back to Archive Button -->
+          <div class="mb-6">
+            <button id="backToArchiveBtn" class="flex items-center text-red-600 hover:text-red-700 font-medium">
+              <i class="fas fa-arrow-left mr-2"></i> Back to Archive
+            </button>
+          </div>
+          
+          <!-- Featured Article -->
+          <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+            <!-- Hero Image -->
+            <div class="relative h-80">
+              <img id="detail-hero-img" src="https://i.pinimg.com/736x/56/db/d4/56dbd4f401e975a4eb78232ec9ccdc28.jpg" alt="Article Hero" class="w-full h-full object-cover">
+              <div id="detail-category" class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">HISTORY</div>
+            </div>
+            
+            <!-- Article Header -->
+            <div class="p-6 md:p-8">
+              <div class="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400 mb-4 gap-4">
+                <span id="detail-date" class="flex items-center"><i class="far fa-calendar mr-2"></i> March 15, 2025</span>
+                <span id="detail-read-time" class="flex items-center"><i class="far fa-clock mr-2"></i> 5 min read</span>
+                <span id="detail-author" class="flex items-center"><i class="far fa-user mr-2"></i> By Sarah Johnson</span>
+              </div>
+              
+              <h1 id="detail-title" class="text-3xl md:text-4xl font-bold mb-4">The Evolution of Nike Air Max: 1987 to 2025</h1>
+              
+              <!-- Social Share -->
+              <div class="flex space-x-3 mb-6">
+                <button class="text-blue-600 hover:text-blue-800"><i class="fab fa-facebook"></i></button>
+                <button class="text-blue-400 hover:text-blue-600"><i class="fab fa-twitter"></i></button>
+                <button class="text-red-600 hover:text-red-800"><i class="fab fa-pinterest"></i></button>
+                <button class="text-green-600 hover:text-green-800"><i class="far fa-envelope"></i></button>
+              </div>
+              
+              <!-- Article Content -->
+              <div id="detail-content" class="prose prose-lg max-w-none dark:prose-invert">
+                <p class="lead text-xl mb-6">The Nike Air Max line has been at the forefront of sneaker innovation for nearly four decades, revolutionizing the industry with its visible Air cushioning technology and bold designs.</p>
+                
+                <p>When Tinker Hatfield designed the first Air Max in 1987, inspired by the Centre Pompidou in Paris, he couldn't have imagined how his creation would transform athletic footwear forever. The exposed Air unit was a radical departure from conventional sneaker design, making the invisible visible and starting a revolution in both performance and style.</p>
+                
+                <h2 class="text-2xl font-bold mt-8 mb-4">The Birth of an Icon: Air Max 1 (1987)</h2>
+                
+                <div class="my-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <img src="https://i.pinimg.com/736x/56/db/d4/56dbd4f401e975a4eb78232ec9ccdc28.jpg" alt="Original Air Max 1" class="rounded-lg">
+                  <div>
+                    <p>The original Air Max 1 debuted on March 26, 1987 (now celebrated as Air Max Day), featuring the first visible Air cushioning unit in the heel. Its red, white, and gray colorway became instantly iconic.</p>
+                    <p class="mt-4">Key features included:</p>
+                    <ul class="list-disc pl-5 mt-2">
+                      <li>Visible Air cushioning in the heel</li>
+                      <li>Suede and mesh upper for breathability</li>
+                      <li>Waffle outsole for traction</li>
+                      <li>Bold colorways that stood out from other running shoes</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <p>Throughout the 1990s, Nike continued to push the boundaries of Air Max technology. The Air Max 90 (originally called the Air Max III) introduced a larger Air unit and more dynamic design. The Air Max 95, designed by Sergio Lozano, was the first to feature visible Air in the forefoot and took inspiration from human anatomy with its gradient upper representing muscle fibers.</p>
+                
+                <h2 class="text-2xl font-bold mt-8 mb-4">The Golden Era: Air Max 97 and Beyond</h2>
+                
+                <p>The Air Max 97, designed by Christian Tresser, marked another watershed moment with its full-length visible Air unit and distinctive ripple design inspired by Japanese bullet trains. Its metallic silver colorway earned it the nickname "Silver Bullet" and cemented its place in sneaker culture.</p>
+                
+                <blockquote class="bg-gray-100 dark:bg-gray-700 p-4 border-l-4 border-red-600 my-6">
+                  <p class="italic">"The Air Max is more than just a shoe—it's a cultural icon that transcends sports, connecting with art, music, and fashion in ways few products ever have."</p>
+                  <cite class="block mt-2 text-right">— Mark Parker, Former Nike CEO</cite>
+                </blockquote>
+                
+                <p>The early 2000s saw Nike experimenting with new manufacturing techniques and materials. The Air Max 360 (2006) was the first to feature a full Air cushioning unit with no foam, truly allowing wearers to "run on air." This innovation set the stage for modern Air Max models like the VaporMax, which eliminated the traditional foam midsole entirely.</p>
+                
+                <h2 class="text-2xl font-bold mt-8 mb-4">Modern Innovations: 2020-2025</h2>
+                
+                <p>In recent years, Nike has continued to evolve the Air Max line with sustainability initiatives and advanced technology. The Air Max 2025 represents the pinnacle of this evolution, featuring:</p>
+                
+                <ul class="list-disc pl-5 my-4">
+                  <li>Recycled materials comprising 50% of the upper</li>
+                  <li>Advanced Flyknit construction for reduced waste</li>
+                  <li>Adaptive cushioning that responds to individual running patterns</li>
+                  <li>Energy-return technology that improves efficiency</li>
+                  <li>Smart connectivity features that track performance metrics</li>
+                </ul>
+                
+                <p>The cultural impact of the Air Max extends far beyond performance. From hip-hop artists to fashion runways, the Air Max has become a symbol of self-expression and style. Collaborations with designers, artists, and cultural figures have kept the line fresh and relevant across generations.</p>
+                
+                <h2 class="text-2xl font-bold mt-8 mb-4">The Future of Air</h2>
+                
+                <p>As we look to the future, Nike continues to push the boundaries of what's possible with Air technology. Rumors of biodegradable Air units and custom-fitted cushioning systems point to an exciting future for the iconic line.</p>
+                
+                <p>The Air Max journey represents Nike's commitment to innovation and cultural relevance. From its revolutionary beginnings to its sustainable future, the Air Max remains a testament to the power of bold design and technological advancement.</p>
+                
+                <p>Whether you're a serious runner, a sneaker collector, or a fashion enthusiast, the Air Max continues to offer something special—a perfect blend of performance, style, and heritage that few other products can match.</p>
+              </div>
+              
+              <!-- Tags -->
+              <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex flex-wrap gap-2">
+                  <span class="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">Nike</span>
+                  <span class="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">Air Max</span>
+                  <span class="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">Sneakers</span>
+                  <span class="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">History</span>
+                  <span class="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">Innovation</span>
+                </div>
+              </div>
+              
+              <!-- Author Bio -->
+              <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex items-start gap-4">
+                <img src="/placeholder.svg?height=80&width=80" alt="Author" class="w-16 h-16 rounded-full">
+                <div>
+                  <h4 class="font-bold">Sarah Johnson</h4>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Sarah is a senior editor specializing in sneaker culture and sports technology. She has been covering the athletic footwear industry for over a decade.</p>
+                </div>
+              </div>
+              
+              <!-- Related Articles -->
+              <div class="mt-12">
+                <h3 class="text-xl font-bold mb-4">Related Articles</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <a href="#" class="group">
+                    <div class="relative h-40 mb-2 overflow-hidden rounded-lg">
+                      <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Related Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h4 class="font-medium group-hover:text-red-600 transition-colors">The Story Behind the Air Jordan Legacy</h4>
+                  </a>
+                  <a href="#" class="group">
+                    <div class="relative h-40 mb-2 overflow-hidden rounded-lg">
+                      <img src="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg" alt="Related Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h4 class="font-medium group-hover:text-red-600 transition-colors">How Nike's Sustainable Practices Are Changing the Industry</h4>
+                  </a>
+                  <a href="#" class="group">
+                    <div class="relative h-40 mb-2 overflow-hidden rounded-lg">
+                      <img src="https://i.pinimg.com/736x/64/52/22/645222423605325fc5c2d946f5a316d6.jpg" alt="Related Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h4 class="font-medium group-hover:text-red-600 transition-colors">The Technology Behind Nike's Running Revolution</h4>
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Comments Section -->
+              <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <h3 class="text-xl font-bold mb-6">Comments (12)</h3>
+                
+                <!-- Comment Form -->
+                <form class="mb-8">
+                  <textarea placeholder="Join the discussion..." class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500 min-h-[100px]"></textarea>
+                  <div class="flex justify-end mt-2">
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-all duration-300">Post Comment</button>
+                  </div>
+                </form>
+                
+                <!-- Comments List -->
+                <div class="space-y-6">
+                  <!-- Comment 1 -->
+                  <div class="flex gap-4">
+                    <img src="/placeholder.svg?height=40&width=40" alt="User" class="w-10 h-10 rounded-full">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h5 class="font-bold">Michael T.</h5>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">2 days ago</span>
+                      </div>
+                      <p class="mt-1">Great article! I've been collecting Air Max shoes since the 90s and it's amazing to see how they've evolved while maintaining their iconic status.</p>
+                      <div class="flex items-center gap-4 mt-2 text-sm">
+                        <button class="text-gray-500 hover:text-red-600">Like (23)</button>
+                        <button class="text-gray-500 hover:text-red-600">Reply</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Comment 2 -->
+                  <div class="flex gap-4">
+                    <img src="/placeholder.svg?height=40&width=40" alt="User" class="w-10 h-10 rounded-full">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h5 class="font-bold">Jessica R.</h5>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">3 days ago</span>
+                      </div>
+                      <p class="mt-1">I never knew the Air Max 97 was inspired by Japanese bullet trains! That's such a cool design inspiration. Would love to see an article about other unexpected influences on Nike designs.</p>
+                      <div class="flex items-center gap-4 mt-2 text-sm">
+                        <button class="text-gray-500 hover:text-red-600">Like (15)</button>
+                        <button class="text-gray-500 hover:text-red-600">Reply</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- View More Comments Button -->
+                  <button class="w-full py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    View More Comments
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="space-y-6">
+      <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl shadow top-24">
+        <h4 class="font-semibold text-lg mb-3">Categories</h4>
+        <ul class="space-y-2">
+          <li><a href="products.html?category=men" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Men's Shoes</a></li>
+          <li><a href="products.html?category=women" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Women's Shoes</a></li>
+          <li><a href="products.html?category=kids" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Kids</a></li>
+          <li><a href="products.html?category=accessories" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Accessories</a></li>
+          <li><a href="products.html?category=new" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> New Releases</a></li>
+          <li><a href="products.html?category=sale" class="hover:text-red-500 flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i class="fas fa-chevron-right text-xs"></i> Sale</a></li>
+        </ul>
+      </div>
+
+      <div class="bg-red-600 text-white p-4 rounded-xl shadow">
+        <h4 class="font-semibold text-lg mb-3">🔥 Hot Deal</h4>
+        <p class="mb-3">Get 20% off on your first order! Use code: <span class="font-bold">NIKE20</span></p>
+        <a href="products.html?category=sale" class="inline-block bg-white text-red-600 py-2 px-4 rounded-full font-medium hover:bg-gray-100 transition-colors">Shop Sale</a>
+      </div>
+
+      <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl shadow">
+        <h4 class="font-semibold text-lg mb-3">Customer Reviews</h4>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+              <i class="fas fa-user text-gray-600"></i>
+            </div>
+            <div>
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <p class="text-sm mt-1">"Best shoes I've ever worn! Super comfortable."</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+              <i class="fas fa-user text-gray-600"></i>
+            </div>
+            <div>
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+              </div>
+              <p class="text-sm mt-1">"Great quality and fast delivery. Will buy again!"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-200 dark:bg-gray-900 py-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h5 class="text-lg font-bold mb-4">Nike Store</h5>
+          <p class="text-gray-600 dark:text-gray-400">The best place to buy authentic Nike products with fast shipping and excellent customer service.</p>
+        </div>
+        <div>
+          <h6 class="font-semibold mb-4">Shop</h6>
+          <ul class="space-y-2">
+            <li><a href="products.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">All Products</a></li>
+            <li><a href="products.html?category=new" class="text-gray-600 dark:text-gray-400 hover:text-red-500">New Arrivals</a></li>
+            <li><a href="products.html?category=sale" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Sale</a></li>
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Gift Cards</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6 class="font-semibold mb-4">Help</h6>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">FAQs</a></li>
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Shipping & Returns</a></li>
+            <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Size Guide</a></li>
+            <li><a href="contact.html" class="text-gray-600 dark:text-gray-400 hover:text-red-500">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6 class="font-semibold mb-4">Connect</h6>
+          <div class="flex space-x-4 text-xl mb-4">
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500"><i class="fab fa-youtube"></i></a>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400">Subscribe to our newsletter</p>
+          <form class="mt-2 flex">
+            <input type="email" placeholder="Email" class="p-2 rounded-l border focus:outline-none focus:ring-1 focus:ring-red-500">
+            <button class="bg-red-600 text-white px-3 rounded-r hover:bg-red-700"><i class="fas fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+      <div class="border-t pt-6 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-600 dark:text-gray-400 text-sm">&copy; 2025 Nike Store. All rights reserved.</p>
+        <div class="flex space-x-4 mt-4 md:mt-0">
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Privacy Policy</a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Terms of Service</a>
+          <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-red-500 text-sm">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-6 right-6 bg-red-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Dark Mode Toggle
+    const darkToggle = document.getElementById('darkToggle');
+    const mobileDarkToggle = document.getElementById('mobileDarkToggle');
+    
+    const toggleDarkMode = () => {
+      document.documentElement.classList.toggle('dark');
+      // Save preference to localStorage
+      if (document.documentElement.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        localStorage.removeItem('darkMode');
+      }
+    };
+    
+    darkToggle.addEventListener('click', toggleDarkMode);
+    mobileDarkToggle.addEventListener('click', toggleDarkMode);
+    
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Shopping Cart Functionality
+    const cartButton = document.getElementById('cartButton');
+    const mobileCartButton = document.getElementById('mobileCartButton');
+    const closeCart = document.getElementById('closeCart');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartCount = document.getElementById('cartCount');
+    const mobileCartCount = document.getElementById('mobileCartCount');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    let cart = [];
+    
+    const openCart = () => {
+      cartSidebar.classList.remove('translate-x-full');
+      cartOverlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    };
+    
+    const closeCartFunc = () => {
+      cartSidebar.classList.add('translate-x-full');
+      cartOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    };
+    
+    cartButton.addEventListener('click', openCart);
+    mobileCartButton.addEventListener('click', openCart);
+    closeCart.addEventListener('click', closeCartFunc);
+    cartOverlay.addEventListener('click', closeCartFunc);
+    
+    // Add to Cart
+    document.querySelectorAll('.product-add').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const id = e.target.getAttribute('data-id');
+        const name = e.target.getAttribute('data-name');
+        const price = parseFloat(e.target.getAttribute('data-price'));
+        
+        // Check if item already in cart
+        const existingItem = cart.find(item => item.id === id);
+        
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({ id, name, price, quantity: 1 });
+        }
+        
+        updateCart();
+        openCart();
+        
+        // Show added notification
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in';
+        notification.textContent = `${name} added to cart!`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+          setTimeout(() => notification.remove(), 300);
+        }, 2000);
+      });
+    });
+    
+    // Update Cart Display
+    const updateCart = () => {
+      // Update count
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCount.textContent = totalItems;
+      mobileCartCount.textContent = totalItems;
+      
+      // Update items list
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty</p>';
+        cartTotal.textContent = '$0.00';
+        return;
+      }
+      
+      cartItems.innerHTML = cart.map(item => `
+        <div class="flex justify-between items-center border-b pb-3">
+          <div>
+            <h5 class="font-medium">${item.name}</h5>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">$${item.price.toFixed(2)} × ${item.quantity}</p>
+          </div>
+          <div class="flex items-center">
+            <span class="font-medium mr-4">$${(item.price * item.quantity).toFixed(2)}</span>
+            <button class="remove-item text-red-500 hover:text-red-700" data-id="${item.id}">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      
+      // Update total
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      cartTotal.textContent = `$${total.toFixed(2)}`;
+      
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const id = e.target.closest('button').getAttribute('data-id');
+          cart = cart.filter(item => item.id !== id);
+          updateCart();
+        });
+      });
+    };
+    
+    // Back to Top Button
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.remove('opacity-0', 'invisible');
+        backToTopButton.classList.add('opacity-100', 'visible');
+      } else {
+        backToTopButton.classList.remove('opacity-100', 'visible');
+        backToTopButton.classList.add('opacity-0', 'invisible');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Article Archive and Detail View Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get DOM elements
+      const archiveView = document.getElementById('archiveView');
+      const detailView = document.getElementById('detailView');
+      const viewArchiveBtn = document.getElementById('viewArchiveBtn');
+      const viewDetailBtn = document.getElementById('viewDetailBtn');
+      const backToArchiveBtn = document.getElementById('backToArchiveBtn');
+      const articleDetailBtns = document.querySelectorAll('.article-detail-btn');
+      
+      // Article data (simplified for demo)
+      const articles = [
+        {
+          id: 1,
+          title: "The Evolution of Nike Air Max: 1987 to 2025",
+          category: "HISTORY",
+          date: "March 15, 2025",
+          readTime: "5 min read",
+          author: "Sarah Johnson",
+          image: "https://i.pinimg.com/736x/62/35/e7/6235e710d3e3324edbfc2320f4503104.jpg",
+          content: "The Nike Air Max line has been at the forefront of sneaker innovation for nearly four decades..."
+        },
+        {
+          id: 2,
+          title: "Advanced Running Techniques for Marathon Training",
+          category: "TRAINING",
+          date: "March 10, 2025",
+          readTime: "8 min read",
+          author: "David Chen",
+          image: "https://i.pinimg.com/736x/64/52/22/645222423605325fc5c2d946f5a316d6.jpg",
+          content: "Professional trainers share their top techniques for improving your marathon performance..."
+        },
+        {
+          id: 3,
+          title: "The Cultural Impact of Air Jordan Beyond Basketball",
+          category: "CULTURE",
+          date: "March 5, 2025",
+          readTime: "6 min read",
+          author: "Marcus Williams",
+          image: "https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg",
+          content: "How Michael Jordan's signature line transcended sports to become a global cultural phenomenon..."
+        }
+      ];
+      
+      // Toggle between archive and detail views
+      viewArchiveBtn.addEventListener('click', () => {
+        archiveView.classList.remove('hidden');
+        detailView.classList.add('hidden');
+        viewArchiveBtn.classList.add('text-red-600');
+        viewArchiveBtn.classList.remove('text-gray-500');
+        viewDetailBtn.classList.add('text-gray-500');
+        viewDetailBtn.classList.remove('text-red-600');
+      });
+      
+      viewDetailBtn.addEventListener('click', () => {
+        archiveView.classList.add('hidden');
+        detailView.classList.remove('hidden');
+        viewArchiveBtn.classList.add('text-gray-500');
+        viewArchiveBtn.classList.remove('text-red-600');
+        viewDetailBtn.classList.add('text-red-600');
+        viewDetailBtn.classList.remove('text-gray-500');
+      });
+      
+      backToArchiveBtn.addEventListener('click', () => {
+        archiveView.classList.remove('hidden');
+        detailView.classList.add('hidden');
+        viewArchiveBtn.classList.add('text-red-600');
+        viewArchiveBtn.classList.remove('text-gray-500');
+        viewDetailBtn.classList.add('text-gray-500');
+        viewDetailBtn.classList.remove('text-red-600');
+      });
+      
+      // Handle article detail buttons
+      articleDetailBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const articleId = parseInt(e.target.getAttribute('data-article-id'));
+          const article = articles.find(a => a.id === articleId) || articles[0];
+          
+          // Update detail view with article data
+          document.getElementById('detail-title').textContent = article.title;
+          document.getElementById('detail-category').textContent = article.category;
+          document.getElementById('detail-date').innerHTML = `<i class="far fa-calendar mr-2"></i> ${article.date}`;
+          document.getElementById('detail-read-time').innerHTML = `<i class="far fa-clock mr-2"></i> ${article.readTime}`;
+          document.getElementById('detail-author').innerHTML = `<i class="far fa-user mr-2"></i> By ${article.author}`;
+          document.getElementById('detail-hero-img').src = article.image;
+          
+          // Switch to detail view
+          archiveView.classList.add('hidden');
+          detailView.classList.remove('hidden');
+          viewArchiveBtn.classList.add('text-gray-500');
+          viewArchiveBtn.classList.remove('text-red-600');
+          viewDetailBtn.classList.add('text-red-600');
+          viewDetailBtn.classList.remove('text-gray-500');
+          
+          // Scroll to top of article
+          window.scrollTo({ top: document.getElementById('article-archive').offsetTop - 100, behavior: 'smooth' });
+        });
+      });
+      
+      // Article search and filter functionality
+      const articleSearch = document.getElementById('article-search');
+      const articleCategory = document.getElementById('article-category');
+      const articleSort = document.getElementById('article-sort');
+      
+      if (articleSearch && articleCategory && articleSort) {
+        // Simple filter functionality (for demonstration)
+        articleSearch.addEventListener('input', filterArticles);
+        articleCategory.addEventListener('change', filterArticles);
+        articleSort.addEventListener('change', sortArticles);
+      }
+      
+      function filterArticles() {
+        // This is a placeholder for actual filtering functionality
+        console.log('Filtering articles...');
+        console.log('Search:', articleSearch.value);
+        console.log('Category:', articleCategory.value);
+      }
+      
+      function sortArticles() {
+        // This is a placeholder for actual sorting functionality
+        console.log('Sorting articles by:', articleSort.value);
+      }
+    });
+
+    // Product Catalog Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Product filter functionality
+      const productSearch = document.getElementById('product-search');
+      const productCategory = document.getElementById('product-category');
+      const productPrice = document.getElementById('product-price');
+      const productSort = document.getElementById('product-sort');
+      
+      if (productSearch && productCategory && productPrice && productSort) {
+        // Simple filter functionality (for demonstration)
+        productSearch.addEventListener('input', filterProducts);
+        productCategory.addEventListener('change', filterProducts);
+        productPrice.addEventListener('change', filterProducts);
+        productSort.addEventListener('change', sortProducts);
+      }
+      
+      function filterProducts() {
+        // This is a placeholder for actual filtering functionality
+        console.log('Filtering products...');
+        console.log('Search:', productSearch.value);
+        console.log('Category:', productCategory.value);
+        console.log('Price Range:', productPrice.value);
+      }
+      
+      function sortProducts() {
+        // This is a placeholder for actual sorting functionality
+        console.log('Sorting products by:', productSort.value);
+      }
+      
+      // Load More Products button
+      const loadMoreBtn = document.getElementById('load-more-products');
+      if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+          // This would typically load more products from an API
+          // For demo purposes, we'll just show a message
+          loadMoreBtn.textContent = 'Loading...';
+          setTimeout(() => {
+            loadMoreBtn.textContent = 'No More Products';
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          }, 1000);
+        });
+      }
+      
+      // Color selection functionality
+      document.querySelectorAll('.mt-3 span').forEach(colorOption => {
+        colorOption.addEventListener('click', (e) => {
+          // Remove selected class from siblings
+          const siblings = e.target.parentElement.querySelectorAll('span');
+          siblings.forEach(sibling => {
+            sibling.classList.remove('ring-2', 'ring-red-600');
+          });
+          
+          // Add selected class to clicked color
+          e.target.classList.add('ring-2', 'ring-red-600');
+          
+          // In a real app, this would update the product image or selection
+          console.log('Color selected:', e.target.style.backgroundColor);
+        });
+      });
+    });
+
+// Product Detail View Functionality
+document.addEventListener('DOMContentLoaded', () => {
+  // Get DOM elements
+  const catalogView = document.getElementById('product-catalog').querySelector('.grid');
+  const productDetailView = document.getElementById('productDetailView');
+  const viewCatalogBtn = document.getElementById('viewCatalogBtn');
+  const viewProductDetailBtn = document.getElementById('viewProductDetailBtn');
+  const backToCatalogBtn = document.getElementById('backToCatalogBtn');
+  const loadMoreBtn = document.getElementById('load-more-products');
+  
+  // Product data (simplified for demo)
+  const products = [
+    {
+      id: 1,
+      title: "Nike Air Max TN",
+      category: "Men's Shoes",
+      price: 200,
+      oldPrice: null,
+      discount: null,
+      badge: "NEW",
+      rating: 4.5,
+      reviewCount: 48,
+      colors: ["black", "blue", "red"],
+      images: [
+        "https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg",
+        "https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg",
+        "https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg",
+        "https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg"
+      ],
+      description: "The Nike Air Max TN, also known as the Nike Air Max Plus, features a gradient mesh upper with wavy TPU overlays for a distinctive look. The Tuned Air technology provides exceptional cushioning and stability for all-day comfort."
+    },
+    {
+      id: 2,
+      title: "Nike Air Force 1",
+      category: "Men's Shoes",
+      price: 150,
+      oldPrice: null,
+      discount: null,
+      badge: "POPULAR",
+      rating: 4.0,
+      reviewCount: 36,
+      colors: ["white", "black", "green"],
+      images: [
+        "https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg",
+        "https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg",
+        "https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg",
+        "https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg"
+      ],
+      description: "The Nike Air Force 1 is a classic basketball shoe that has become a streetwear icon. Its clean design, durable construction, and Air cushioning make it a comfortable and stylish choice for everyday wear."
+    }
+  ];
+  
+  // Toggle between catalog and detail views
+  viewCatalogBtn.addEventListener('click', () => {
+    catalogView.classList.remove('hidden');
+    productDetailView.classList.add('hidden');
+    loadMoreBtn.classList.remove('hidden');
+    viewCatalogBtn.classList.add('text-red-600');
+    viewCatalogBtn.classList.remove('text-gray-500');
+    viewProductDetailBtn.classList.add('text-gray-500');
+    viewProductDetailBtn.classList.remove('text-red-600');
+  });
+  
+  viewProductDetailBtn.addEventListener('click', () => {
+    catalogView.classList.add('hidden');
+    productDetailView.classList.remove('hidden');
+    loadMoreBtn.classList.add('hidden');
+    viewCatalogBtn.classList.add('text-gray-500');
+    viewCatalogBtn.classList.remove('text-red-600');
+    viewProductDetailBtn.classList.add('text-red-600');
+    viewProductDetailBtn.classList.remove('text-gray-500');
+    
+    // Load first product by default
+    loadProductDetails(1);
+  });
+  
+  backToCatalogBtn.addEventListener('click', () => {
+    catalogView.classList.remove('hidden');
+    productDetailView.classList.add('hidden');
+    loadMoreBtn.classList.remove('hidden');
+    viewCatalogBtn.classList.add('text-red-600');
+    viewCatalogBtn.classList.remove('text-gray-500');
+    viewProductDetailBtn.classList.add('text-gray-500');
+    viewProductDetailBtn.classList.remove('text-red-600');
+  });
+  
+  // Add click event to product cards
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Don't trigger if clicking on the add to cart button
+      if (e.target.closest('.product-add')) return;
+      
+      const productId = parseInt(card.getAttribute('data-product-id'));
+      
+      // Switch to detail view
+      catalogView.classList.add('hidden');
+      productDetailView.classList.remove('hidden');
+      loadMoreBtn.classList.add('hidden');
+      viewCatalogBtn.classList.add('text-gray-500');
+      viewCatalogBtn.classList.remove('text-red-600');
+      viewProductDetailBtn.classList.add('text-red-600');
+      viewProductDetailBtn.classList.remove('text-gray-500');
+      
+      // Load product details
+      loadProductDetails(productId);
+    });
+  });
+  
+  // Load product details
+  function loadProductDetails(productId) {
+    const product = products.find(p => p.id === productId) || products[0];
+    
+    // Update product details
+    document.getElementById('productTitle').textContent = product.title;
+    document.getElementById('productCategory').textContent = product.category;
+    document.getElementById('productPrice').textContent = `$${product.price.toFixed(2)}`;
+    document.getElementById('productDescription').textContent = product.description;
+    document.getElementById('productMainImage').src = product.images[0];
+    document.getElementById('productBadge').textContent = product.badge;
+    
+    // Update old price and discount if applicable
+    if (product.oldPrice) {
+      document.getElementById('productOldPrice').textContent = `$${product.oldPrice.toFixed(2)}`;
+      document.getElementById('productOldPrice').classList.remove('hidden');
+      document.getElementById('productDiscount').textContent = `${product.discount}% OFF`;
+      document.getElementById('productDiscount').classList.remove('hidden');
+    } else {
+      document.getElementById('productOldPrice').classList.add('hidden');
+      document.getElementById('productDiscount').classList.add('hidden');
+    }
+    
+    // Update thumbnail images
+    const thumbnailBtns = document.querySelectorAll('.thumbnail-btn');
+    product.images.forEach((image, index) => {
+      if (thumbnailBtns[index]) {
+        thumbnailBtns[index].querySelector('img').src = image;
+      }
+    });
+  }
+  
+  // Thumbnail image click
+  document.querySelectorAll('.thumbnail-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Remove active class from all thumbnails
+      document.querySelectorAll('.thumbnail-btn').forEach(b => {
+        b.classList.remove('active', 'border-red-600');
+        b.classList.add('border-transparent');
+      });
+      
+      // Add active class to clicked thumbnail
+      btn.classList.add('active', 'border-red-600');
+      btn.classList.remove('border-transparent');
+      
+      // Update main image
+      document.getElementById('productMainImage').src = btn.querySelector('img').src;
+    });
+  });
+  
+  // Color selection
+  document.querySelectorAll('.color-option').forEach(option => {
+    option.addEventListener('click', () => {
+      // Remove active class from all color options
+      document.querySelectorAll('.color-option').forEach(o => {
+        o.classList.remove('active', 'ring-2');
+      });
+      
+      // Add active class to clicked option
+      option.classList.add('active', 'ring-2');
+    });
+  });
+  
+  // Size selection
+  document.querySelectorAll('.size-option').forEach(option => {
+    if (!option.classList.contains('cursor-not-allowed')) {
+      option.addEventListener('click', () => {
+        // Remove active class from all size options
+        document.querySelectorAll('.size-option').forEach(o => {
+          o.classList.remove('active', 'border-red-600', 'bg-red-50', 'dark:bg-red-900/10');
+        });
+        
+        // Add active class to clicked option
+        option.classList.add('active', 'border-red-600', 'bg-red-50', 'dark:bg-red-900/10');
+      });
+    }
+  });
+  
+  // Quantity controls
+  const quantityInput = document.getElementById('productQuantity');
+  document.getElementById('decreaseQuantity').addEventListener('click', () => {
+    const currentValue = parseInt(quantityInput.value);
+    if (currentValue > 1) {
+      quantityInput.value = currentValue - 1;
+    }
+  });
+  
+  document.getElementById('increaseQuantity').addEventListener('click', () => {
+    const currentValue = parseInt(quantityInput.value);
+    if (currentValue < 10) {
+      quantityInput.value = currentValue + 1;
+    }
+  });
+  
+  // Add to cart button
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    const productTitle = document.getElementById('productTitle').textContent;
+    const productPrice = parseFloat(document.getElementById('productPrice').textContent.replace('$', ''));
+    const quantity = parseInt(document.getElementById('productQuantity').value);
+    
+    // Add to cart (reusing existing cart functionality)
+    for (let i = 0; i < quantity; i++) {
+      const existingItem = cart.find(item => item.name === productTitle);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ id: Date.now().toString(), name: productTitle, price: productPrice, quantity: 1 });
+      }
+    }
+    
+    updateCart();
+    openCart();
+    
+    // Show notification
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in';
+    notification.textContent = `${productTitle} added to cart!`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+      setTimeout(() => notification.remove(), 300);
+    }, 2000);
+  });
+  
+  // Wishlist button
+  document.getElementById('addToWishlistBtn').addEventListener('click', () => {
+    const btn = document.getElementById('addToWishlistBtn');
+    const icon = btn.querySelector('i');
+    
+    if (icon.classList.contains('far')) {
+      icon.classList.remove('far');
+      icon.classList.add('fas', 'text-red-600');
+      
+      // Show notification
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in';
+      notification.textContent = 'Added to wishlist!';
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
+    } else {
+      icon.classList.remove('fas', 'text-red-600');
+      icon.classList.add('far');
+    }
+  });
+  
+  // Product tabs
+  document.querySelectorAll('.product-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      
+      // Remove active class from all tab buttons
+      document.querySelectorAll('.product-tab-btn').forEach(b => {
+        b.classList.remove('active', 'border-red-600');
+        b.classList.add('border-transparent');
+      });
+      
+      // Add active class to clicked tab button
+      btn.classList.add('active', 'border-red-600');
+      btn.classList.remove('border-transparent');
+      
+      // Hide all tab content
+      document.querySelectorAll('.product-tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      // Show selected tab content
+      document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+    });
+  });
+});
+  </script>
+</body>
+</html>

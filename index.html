@@ -87,20 +87,20 @@
 
   <!-- Shopping Cart Sidebar -->
   <div id="cartSidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
-    <div class="p-4 flex justify-between items-center border-b">
+    <div class="p-4 flex justify-between items-center border-b dark:border-gray-700">
       <h3 class="text-xl font-bold">Your Cart</h3>
       <button id="closeCart" class="text-2xl hover:text-red-500">&times;</button>
     </div>
     <div id="cartItems" class="p-4 space-y-4">
       <!-- Cart items will be added here dynamically -->
-      <p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty</p>
+      <p class="text-center text-gray-500 dark:text-gray-400 empty-cart-message">Your cart is empty</p>
     </div>
-    <div class="p-4 border-t">
+    <div class="p-4 border-t dark:border-gray-700">
       <div class="flex justify-between font-bold text-lg mb-4">
         <span>Total:</span>
-        <span id="cartTotal">$600</span>
+        <span id="cartTotal">$0.00</span>
       </div>
-      <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full">Checkout</button>
+      <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-all duration-300">Checkout</button>
     </div>
   </div>
   <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
@@ -154,7 +154,7 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Product Card 1 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl product-card" data-product-id="1">
             <div class="relative overflow-hidden">
               <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Nike Air Max TN" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
               <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="1" data-name="Nike Air Max TN" data-price="200">
@@ -176,7 +176,7 @@
           </div>
 
           <!-- Product Card 2 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl product-card" data-product-id="2">
             <div class="relative overflow-hidden">
               <img src="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg" alt="Nike Air Force" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
               <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="2" data-name="Nike Air Force 1" data-price="150">
@@ -198,7 +198,7 @@
           </div>
 
           <!-- Product Card 3 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl product-card" data-product-id="3">
             <div class="relative overflow-hidden">
               <img src="https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg" alt="Nike SB Dunk" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
               <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="3" data-name="Nike Air Jordan 1 low OG fragment" data-price="800">
@@ -1192,7 +1192,11 @@
     const cartItems = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
     
-    let cart = [];
+    // Initialize cart from localStorage or empty array
+    let cart = JSON.parse(localStorage.getItem('swooshCart')) || [];
+
+    // Update cart display on page load
+    updateCart();
     
     const openCart = () => {
       cartSidebar.classList.remove('translate-x-full');
@@ -1213,10 +1217,13 @@
     
     // Add to Cart
     document.querySelectorAll('.product-add').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const id = e.target.getAttribute('data-id');
-        const name = e.target.getAttribute('data-name');
-        const price = parseFloat(e.target.getAttribute('data-price'));
+      button.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent triggering parent card click
+        
+        // Get product data from button attributes
+        const id = this.getAttribute('data-id');
+        const name = this.getAttribute('data-name');
+        const price = parseFloat(this.getAttribute('data-price'));
         
         // Check if item already in cart
         const existingItem = cart.find(item => item.id === id);
@@ -1227,12 +1234,15 @@
           cart.push({ id, name, price, quantity: 1 });
         }
         
+        // Save cart to localStorage
+        localStorage.setItem('swooshCart', JSON.stringify(cart));
+        
         updateCart();
         openCart();
         
         // Show added notification
         const notification = document.createElement('div');
-        notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in';
+        notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in z-50';
         notification.textContent = `${name} added to cart!`;
         document.body.appendChild(notification);
         
@@ -1244,7 +1254,7 @@
     });
     
     // Update Cart Display
-    const updateCart = () => {
+    function updateCart() {
       // Update count
       const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
       cartCount.textContent = totalItems;
@@ -1252,16 +1262,35 @@
       
       // Update items list
       if (cart.length === 0) {
-        cartItems.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">Your cart is empty</p>';
+        cartItems.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 empty-cart-message">Your cart is empty</p>';
         cartTotal.textContent = '$0.00';
         return;
       }
       
-      cartItems.innerHTML = cart.map(item => `
-        <div class="flex justify-between items-center border-b pb-3">
+      // Remove empty cart message if it exists
+      const emptyMessage = cartItems.querySelector('.empty-cart-message');
+      if (emptyMessage) {
+        emptyMessage.remove();
+      }
+      
+      // Clear existing items
+      cartItems.innerHTML = '';
+      
+      // Add each cart item
+      cart.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'flex justify-between items-center border-b dark:border-gray-700 pb-3 mb-3';
+        itemElement.innerHTML = `
           <div>
             <h5 class="font-medium">${item.name}</h5>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">$${item.price.toFixed(2)} × ${item.quantity}</p>
+            <div class="text-gray-500 dark:text-gray-400 text-sm flex items-center">
+              <span>$${item.price.toFixed(2)} × </span>
+              <div class="inline-flex items-center ml-1 border border-gray-300 dark:border-gray-600 rounded">
+                <button class="decrease-item px-2 py-0.5 hover:bg-gray-100 dark:hover:bg-gray-700" data-id="${item.id}">-</button>
+                <span class="px-2">${item.quantity}</span>
+                <button class="increase-item px-2 py-0.5 hover:bg-gray-100 dark:hover:bg-gray-700" data-id="${item.id}">+</button>
+              </div>
+            </div>
           </div>
           <div class="flex items-center">
             <span class="font-medium mr-4">$${(item.price * item.quantity).toFixed(2)}</span>
@@ -1269,22 +1298,59 @@
               <i class="fas fa-times"></i>
             </button>
           </div>
-        </div>
-      `).join('');
+        `;
+        
+        cartItems.appendChild(itemElement);
+      });
       
       // Update total
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       cartTotal.textContent = `$${total.toFixed(2)}`;
       
-      // Add event listeners to remove buttons
+      // Add event listeners to cart item buttons
+      addCartItemEventListeners();
+    }
+
+    function addCartItemEventListeners() {
+      // Remove item buttons
       document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', (e) => {
-          const id = e.target.closest('button').getAttribute('data-id');
+        button.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
           cart = cart.filter(item => item.id !== id);
+          localStorage.setItem('swooshCart', JSON.stringify(cart));
           updateCart();
         });
       });
-    };
+      
+      // Decrease quantity buttons
+      document.querySelectorAll('.decrease-item').forEach(button => {
+        button.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const item = cart.find(item => item.id === id);
+          
+          if (item.quantity > 1) {
+            item.quantity -= 1;
+          } else {
+            cart = cart.filter(item => item.id !== id);
+          }
+          
+          localStorage.setItem('swooshCart', JSON.stringify(cart));
+          updateCart();
+        });
+      });
+      
+      // Increase quantity buttons
+      document.querySelectorAll('.increase-item').forEach(button => {
+        button.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const item = cart.find(item => item.id === id);
+          
+          item.quantity += 1;
+          localStorage.setItem('swooshCart', JSON.stringify(cart));
+          updateCart();
+        });
+      });
+    }
     
     // Back to Top Button
     const backToTopButton = document.getElementById('backToTop');
@@ -1456,21 +1522,6 @@
         console.log('Sorting products by:', productSort.value);
       }
       
-      // Load More Products button
-      const loadMoreBtn = document.getElementById('load-more-products');
-      if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', () => {
-          // This would typically load more products from an API
-          // For demo purposes, we'll just show a message
-          loadMoreBtn.textContent = 'Loading...';
-          setTimeout(() => {
-            loadMoreBtn.textContent = 'No More Products';
-            loadMoreBtn.disabled = true;
-            loadMoreBtn.classList.add('opacity-50', 'cursor-not-allowed');
-          }, 1000);
-        });
-      }
-      
       // Color selection functionality
       document.querySelectorAll('.mt-3 span').forEach(colorOption => {
         colorOption.addEventListener('click', (e) => {
@@ -1492,12 +1543,9 @@
 // Product Detail View Functionality
 document.addEventListener('DOMContentLoaded', () => {
   // Get DOM elements
-  const catalogView = document.getElementById('product-catalog').querySelector('.grid');
+  const catalogView = document.getElementById('products');
   const productDetailView = document.getElementById('productDetailView');
-  const viewCatalogBtn = document.getElementById('viewCatalogBtn');
-  const viewProductDetailBtn = document.getElementById('viewProductDetailBtn');
   const backToCatalogBtn = document.getElementById('backToCatalogBtn');
-  const loadMoreBtn = document.getElementById('load-more-products');
   
   // Product data (simplified for demo)
   const products = [
@@ -1541,38 +1589,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
   
-  // Toggle between catalog and detail views
-  viewCatalogBtn.addEventListener('click', () => {
-    catalogView.classList.remove('hidden');
-    productDetailView.classList.add('hidden');
-    loadMoreBtn.classList.remove('hidden');
-    viewCatalogBtn.classList.add('text-red-600');
-    viewCatalogBtn.classList.remove('text-gray-500');
-    viewProductDetailBtn.classList.add('text-gray-500');
-    viewProductDetailBtn.classList.remove('text-red-600');
-  });
-  
-  viewProductDetailBtn.addEventListener('click', () => {
-    catalogView.classList.add('hidden');
-    productDetailView.classList.remove('hidden');
-    loadMoreBtn.classList.add('hidden');
-    viewCatalogBtn.classList.add('text-gray-500');
-    viewCatalogBtn.classList.remove('text-red-600');
-    viewProductDetailBtn.classList.add('text-red-600');
-    viewProductDetailBtn.classList.remove('text-gray-500');
-    
-    // Load first product by default
-    loadProductDetails(1);
-  });
-  
+  // Back to catalog button
   backToCatalogBtn.addEventListener('click', () => {
-    catalogView.classList.remove('hidden');
     productDetailView.classList.add('hidden');
-    loadMoreBtn.classList.remove('hidden');
-    viewCatalogBtn.classList.add('text-red-600');
-    viewCatalogBtn.classList.remove('text-gray-500');
-    viewProductDetailBtn.classList.add('text-gray-500');
-    viewProductDetailBtn.classList.remove('text-red-600');
+    catalogView.classList.remove('hidden');
   });
   
   // Add click event to product cards
@@ -1586,11 +1606,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Switch to detail view
       catalogView.classList.add('hidden');
       productDetailView.classList.remove('hidden');
-      loadMoreBtn.classList.add('hidden');
-      viewCatalogBtn.classList.add('text-gray-500');
-      viewCatalogBtn.classList.remove('text-red-600');
-      viewProductDetailBtn.classList.add('text-red-600');
-      viewProductDetailBtn.classList.remove('text-gray-500');
       
       // Load product details
       loadProductDetails(productId);
@@ -1662,17 +1677,15 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Size selection
   document.querySelectorAll('.size-option').forEach(option => {
-    if (!option.classList.contains('cursor-not-allowed')) {
-      option.addEventListener('click', () => {
-        // Remove active class from all size options
-        document.querySelectorAll('.size-option').forEach(o => {
-          o.classList.remove('active', 'border-red-600', 'bg-red-50', 'dark:bg-red-900/10');
-        });
-        
-        // Add active class to clicked option
-        option.classList.add('active', 'border-red-600', 'bg-red-50', 'dark:bg-red-900/10');
+    option.addEventListener('click', () => {
+      // Remove active class from all size options
+      document.querySelectorAll('.size-option').forEach(o => {
+        o.classList.remove('active', 'border-red-600');
       });
-    }
+      
+      // Add active class to clicked option
+      option.classList.add('active', 'border-red-600');
+    });
   });
   
   // Quantity controls
@@ -1708,12 +1721,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
+    localStorage.setItem('swooshCart', JSON.stringify(cart));
     updateCart();
     openCart();
     
     // Show notification
     const notification = document.createElement('div');
-    notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in';
+    notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in z-50';
     notification.textContent = `${productTitle} added to cart!`;
     document.body.appendChild(notification);
     
@@ -1734,7 +1748,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Show notification
       const notification = document.createElement('div');
-      notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in';
+      notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in z-50';
       notification.textContent = 'Added to wishlist!';
       document.body.appendChild(notification);
       

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Swoosh Society - Unleash Your Potential</title>
+  <title>Swoosh Society - Enhanced Shopping Cart</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
@@ -25,6 +25,64 @@
       }
     };
   </script>
+  <style>
+    /* Additional custom styles */
+    .cart-step {
+      display: none;
+    }
+    .cart-step.active {
+      display: block;
+    }
+    .checkout-progress-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .checkout-progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #e5e7eb;
+      z-index: 0;
+      transform: translateY(-50%);
+    }
+    .progress-step {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background-color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      position: relative;
+      z-index: 1;
+    }
+    .progress-step.active {
+      background-color: #dc2626;
+      color: white;
+    }
+    .progress-step.completed {
+      background-color: #16a34a;
+      color: white;
+    }
+    .dark .progress-step {
+      background-color: #4b5563;
+    }
+    .dark .checkout-progress-bar::before {
+      background-color: #4b5563;
+    }
+    .payment-tab.active {
+      background-color: #f3f4f6;
+    }
+    .dark .payment-tab.active {
+      background-color: #374151;
+    }
+  </style>
 </head>
 <body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-all duration-300">
 
@@ -86,21 +144,319 @@
   </header>
 
   <!-- Shopping Cart Sidebar -->
-  <div id="cartSidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+  <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
     <div class="p-4 flex justify-between items-center border-b dark:border-gray-700">
-      <h3 class="text-xl font-bold">Your Cart</h3>
+      <h3 id="cartTitle" class="text-xl font-bold flex items-center gap-2">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cartStepTitle">Your Cart</span>
+      </h3>
       <button id="closeCart" class="text-2xl hover:text-red-500">&times;</button>
     </div>
-    <div id="cartItems" class="p-4 space-y-4">
-      <!-- Cart items will be added here dynamically -->
-      <p class="text-center text-gray-500 dark:text-gray-400 empty-cart-message">Your cart is empty</p>
-    </div>
-    <div class="p-4 border-t dark:border-gray-700">
-      <div class="flex justify-between font-bold text-lg mb-4">
-        <span>Total:</span>
-        <span id="cartTotal">$0.00</span>
+    
+    <!-- Checkout Progress Bar (initially hidden) -->
+    <div id="checkoutProgress" class="px-4 pt-4 hidden">
+      <div class="checkout-progress-bar">
+        <div class="progress-step active" data-step="cart">1</div>
+        <div class="progress-step" data-step="shipping">2</div>
+        <div class="progress-step" data-step="payment">3</div>
+        <div class="progress-step" data-step="confirmation">4</div>
       </div>
-      <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-all duration-300">Checkout</button>
+      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 px-1">
+        <span>Cart</span>
+        <span>Shipping</span>
+        <span>Payment</span>
+        <span>Confirm</span>
+      </div>
+    </div>
+    
+    <!-- Cart Content Container -->
+    <div id="cartContent" class="p-4">
+      <!-- Cart Items View -->
+      <div id="cartStep" class="cart-step active">
+        <div id="cartItems" class="space-y-4">
+          <!-- Cart items will be added here dynamically -->
+          <p class="text-center text-gray-500 dark:text-gray-400 empty-cart-message">Your cart is empty</p>
+        </div>
+        
+        <div id="cartSummary" class="p-4 border-t dark:border-gray-700 mt-4 hidden">
+          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-4">
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
+                <span id="cartSubtotal">$0.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Shipping</span>
+                <span>Calculated at checkout</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Tax</span>
+                <span>Calculated at checkout</span>
+              </div>
+              <div class="border-t dark:border-gray-600 pt-2 mt-2 font-medium flex justify-between">
+                <span>Total</span>
+                <span id="cartTotal">$0.00</span>
+              </div>
+            </div>
+          </div>
+          <button id="checkoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-all duration-300 mb-2">Proceed to Checkout</button>
+          <button id="continueShoppingBtn" class="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg transition-all duration-300">Continue Shopping</button>
+        </div>
+      </div>
+      
+      <!-- Shipping View -->
+      <div id="shippingStep" class="cart-step">
+        <button id="backToCartBtn" class="flex items-center text-red-600 hover:text-red-700 mb-4 text-sm">
+          <i class="fas fa-arrow-left mr-2"></i> Back to cart
+        </button>
+        
+        <form id="shippingForm" class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-2">
+              <label for="fullName" class="block text-sm font-medium mb-1">Full Name</label>
+              <input type="text" id="fullName" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div class="col-span-2">
+              <label for="address" class="block text-sm font-medium mb-1">Address</label>
+              <input type="text" id="address" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="city" class="block text-sm font-medium mb-1">City</label>
+              <input type="text" id="city" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="state" class="block text-sm font-medium mb-1">State</label>
+              <input type="text" id="state" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="zipCode" class="block text-sm font-medium mb-1">ZIP Code</label>
+              <input type="text" id="zipCode" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="country" class="block text-sm font-medium mb-1">Country</label>
+              <input type="text" id="country" value="United States" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium mb-1">Phone</label>
+              <input type="tel" id="phone" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium mb-1">Email</label>
+              <input type="email" id="email" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+          </div>
+          
+          <div class="border-t dark:border-gray-700 pt-4 mt-4">
+            <h4 class="font-medium mb-3 flex items-center">
+              <i class="fas fa-truck mr-2"></i>
+              Shipping Method
+            </h4>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between space-x-2 border p-3 rounded-md">
+                <div class="flex items-center space-x-2">
+                  <input type="radio" name="shippingMethod" id="standardShipping" value="standard" checked class="text-red-600 focus:ring-red-500">
+                  <label for="standardShipping" class="cursor-pointer">Standard Shipping (3-5 days)</label>
+                </div>
+                <div class="text-sm font-medium">$5.00</div>
+              </div>
+              <div class="flex items-center justify-between space-x-2 border p-3 rounded-md">
+                <div class="flex items-center space-x-2">
+                  <input type="radio" name="shippingMethod" id="expressShipping" value="express" class="text-red-600 focus:ring-red-500">
+                  <label for="expressShipping" class="cursor-pointer">Express Shipping (1-2 days)</label>
+                </div>
+                <div class="text-sm font-medium">$15.00</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mt-6">
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
+                <span id="shippingSubtotal">$0.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Shipping</span>
+                <span id="shippingCost">$5.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Tax</span>
+                <span id="shippingTax">$0.00</span>
+              </div>
+              <div class="border-t dark:border-gray-600 pt-2 mt-2 font-medium flex justify-between">
+                <span>Total</span>
+                <span id="shippingTotal">$0.00</span>
+              </div>
+            </div>
+          </div>
+          
+          <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-all duration-300">Continue to Payment</button>
+        </form>
+      </div>
+      
+      <!-- Payment View -->
+      <div id="paymentStep" class="cart-step">
+        <button id="backToShippingBtn" class="flex items-center text-red-600 hover:text-red-700 mb-4 text-sm">
+          <i class="fas fa-arrow-left mr-2"></i> Back to shipping
+        </button>
+        
+        <form id="paymentForm" class="space-y-6">
+          <div>
+            <h4 class="font-medium mb-3 flex items-center">
+              <i class="fas fa-credit-card mr-2"></i>
+              Payment Method
+            </h4>
+            <div class="border rounded-md overflow-hidden">
+              <div class="flex border-b">
+                <button type="button" class="payment-tab active flex-1 py-2 px-4 text-center focus:outline-none" data-tab="card">Credit Card</button>
+                <button type="button" class="payment-tab flex-1 py-2 px-4 text-center focus:outline-none" data-tab="paypal">PayPal</button>
+                <button type="button" class="payment-tab flex-1 py-2 px-4 text-center focus:outline-none" data-tab="apple">Apple Pay</button>
+              </div>
+              
+              <div id="cardTab" class="payment-content p-4 space-y-4">
+                <div>
+                  <label for="cardNumber" class="block text-sm font-medium mb-1">Card Number</label>
+                  <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="col-span-2">
+                    <label for="expiry" class="block text-sm font-medium mb-1">Expiry Date</label>
+                    <input type="text" id="expiry" placeholder="MM/YY" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                  </div>
+                  <div>
+                    <label for="cvc" class="block text-sm font-medium mb-1">CVC</label>
+                    <input type="text" id="cvc" placeholder="123" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                  </div>
+                </div>
+                <div>
+                  <label for="nameOnCard" class="block text-sm font-medium mb-1">Name on Card</label>
+                  <input type="text" id="nameOnCard" required class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+              </div>
+              
+              <div id="paypalTab" class="payment-content p-4 hidden">
+                <div class="text-center py-6">
+                  <i class="fab fa-paypal text-blue-600 text-4xl mb-4"></i>
+                  <p class="mb-4">You'll be redirected to PayPal to complete your purchase securely.</p>
+                  <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-all duration-300 w-full">Continue with PayPal</button>
+                </div>
+              </div>
+              
+              <div id="appleTab" class="payment-content p-4 hidden">
+                <div class="text-center py-6">
+                  <i class="fab fa-apple text-black dark:text-white text-4xl mb-4"></i>
+                  <p class="mb-4">You'll be redirected to Apple Pay to complete your purchase securely.</p>
+                  <button type="button" class="bg-black text-white py-2 px-4 rounded-lg transition-all duration-300 w-full">Continue with Apple Pay</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="border-t dark:border-gray-700 pt-4">
+            <h4 class="font-medium mb-3">Billing Address</h4>
+            <div class="flex items-center space-x-2 mb-4">
+              <input type="checkbox" id="sameAsShipping" class="rounded border-gray-300 text-red-600 focus:ring-red-500" checked>
+              <label for="sameAsShipping">Same as shipping address</label>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-medium mb-3">Order Notes (Optional)</h4>
+            <textarea id="orderNotes" placeholder="Special instructions for your order" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 resize-none h-20"></textarea>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+            <h4 class="font-medium mb-2">Order Summary</h4>
+            <div id="paymentItemsList" class="space-y-2 text-sm mb-4">
+              <!-- Order items will be listed here -->
+            </div>
+            <div class="border-t dark:border-gray-600 pt-2 mt-2 space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
+                <span id="paymentSubtotal">$0.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Shipping</span>
+                <span id="paymentShipping">$5.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Tax</span>
+                <span id="paymentTax">$0.00</span>
+              </div>
+              <div class="border-t dark:border-gray-600 pt-2 mt-2 font-medium flex justify-between">
+                <span>Total</span>
+                <span id="paymentTotal">$0.00</span>
+              </div>
+            </div>
+          </div>
+          
+          <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-all duration-300">Place Order</button>
+        </form>
+      </div>
+      
+      <!-- Confirmation View -->
+      <div id="confirmationStep" class="cart-step">
+        <div class="text-center py-6">
+          <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-check text-green-600 dark:text-green-400 text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-2">Thank You!</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">Your order has been placed successfully.</p>
+          
+          <div class="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-lg overflow-hidden mb-6">
+            <div class="p-4 border-b dark:border-gray-600">
+              <h4 id="orderNumber" class="font-bold">Order #NKE12345678</h4>
+              <p id="orderDate" class="text-sm text-gray-500 dark:text-gray-400">May 22, 2025</p>
+            </div>
+            <div class="p-4">
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-600 dark:text-gray-400">Items</span>
+                  <span id="confirmationSubtotal">$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600 dark:text-gray-400">Shipping</span>
+                  <span id="confirmationShipping">$5.00</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600 dark:text-gray-400">Tax</span>
+                  <span id="confirmationTax">$0.00</span>
+                </div>
+                <div class="border-t dark:border-gray-600 pt-2 mt-2 font-medium flex justify-between">
+                  <span>Total</span>
+                  <span id="confirmationTotal">$0.00</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 border-t dark:border-gray-600">
+              <div class="text-sm mb-2">
+                <span class="font-medium">Shipping Address:</span>
+                <p id="confirmationAddress" class="text-gray-600 dark:text-gray-400">
+                  John Doe<br>
+                  123 Main St<br>
+                  New York, NY 10001<br>
+                  United States
+                </p>
+              </div>
+              <div class="text-sm">
+                <span class="font-medium">Shipping Method:</span>
+                <p id="confirmationShippingMethod" class="text-gray-600 dark:text-gray-400">
+                  Standard Shipping
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <p id="confirmationEmail" class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+            A confirmation email has been sent to john@example.com
+          </p>
+          
+          <div class="space-y-2">
+            <button id="continueShopping" class="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg transition-all duration-300">Continue Shopping</button>
+            <button id="closeConfirmation" class="w-full text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 py-2 px-4 transition-all duration-300">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
@@ -157,7 +513,7 @@
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl product-card" data-product-id="1">
             <div class="relative overflow-hidden">
               <img src="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg" alt="Nike Air Max TN" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
-              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="1" data-name="Nike Air Max TN" data-price="200">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="1" data-name="Nike Air Max TN" data-price="200" data-image="https://i.pinimg.com/736x/d7/65/d3/d765d3934a6efd8840e03e613f3bf2d7.jpg">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -179,7 +535,7 @@
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl product-card" data-product-id="2">
             <div class="relative overflow-hidden">
               <img src="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg" alt="Nike Air Force" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
-              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="2" data-name="Nike Air Force 1" data-price="150">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="2" data-name="Nike Air Force 1" data-price="150" data-image="https://i.pinimg.com/736x/10/ea/49/10ea49bee5efaad4acd9430078173bfa.jpg">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -201,7 +557,7 @@
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl product-card" data-product-id="3">
             <div class="relative overflow-hidden">
               <img src="https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg" alt="Nike SB Dunk" class="w-full h-60 object-contain bg-gray-100 group-hover:scale-110 transition-transform duration-500">
-              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="3" data-name="Nike Air Jordan 1 low OG fragment" data-price="800">
+              <button class="product-add absolute bottom-4 right-4 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110" data-id="3" data-name="Nike Air Jordan 1 low OG fragment" data-price="800" data-image="https://i.pinimg.com/736x/63/6c/16/636c16c78d51294bc1852db2f4e9cf03.jpg">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -1182,175 +1538,473 @@
     }
 
     // Shopping Cart Functionality
-    const cartButton = document.getElementById('cartButton');
-    const mobileCartButton = document.getElementById('mobileCartButton');
-    const closeCart = document.getElementById('closeCart');
-    const cartSidebar = document.getElementById('cartSidebar');
-    const cartOverlay = document.getElementById('cartOverlay');
-    const cartCount = document.getElementById('cartCount');
-    const mobileCartCount = document.getElementById('mobileCartCount');
-    const cartItems = document.getElementById('cartItems');
-    const cartTotal = document.getElementById('cartTotal');
-    
-    // Initialize cart from localStorage or empty array
-    let cart = JSON.parse(localStorage.getItem('swooshCart')) || [];
-
-    // Update cart display on page load
-    updateCart();
-    
-    const openCart = () => {
-      cartSidebar.classList.remove('translate-x-full');
-      cartOverlay.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    };
-    
-    const closeCartFunc = () => {
-      cartSidebar.classList.add('translate-x-full');
-      cartOverlay.classList.add('hidden');
-      document.body.style.overflow = '';
-    };
-    
-    cartButton.addEventListener('click', openCart);
-    mobileCartButton.addEventListener('click', openCart);
-    closeCart.addEventListener('click', closeCartFunc);
-    cartOverlay.addEventListener('click', closeCartFunc);
-    
-    // Add to Cart
-    document.querySelectorAll('.product-add').forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent triggering parent card click
+    document.addEventListener('DOMContentLoaded', function() {
+      const cartButton = document.getElementById('cartButton');
+      const mobileCartButton = document.getElementById('mobileCartButton');
+      const closeCart = document.getElementById('closeCart');
+      const cartSidebar = document.getElementById('cartSidebar');
+      const cartOverlay = document.getElementById('cartOverlay');
+      const cartCount = document.getElementById('cartCount');
+      const mobileCartCount = document.getElementById('mobileCartCount');
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const cartSubtotal = document.getElementById('cartSubtotal');
+      const cartSummary = document.getElementById('cartSummary');
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+      
+      // Checkout Steps
+      const cartStep = document.getElementById('cartStep');
+      const shippingStep = document.getElementById('shippingStep');
+      const paymentStep = document.getElementById('paymentStep');
+      const confirmationStep = document.getElementById('confirmationStep');
+      const cartStepTitle = document.getElementById('cartStepTitle');
+      const checkoutProgress = document.getElementById('checkoutProgress');
+      const progressSteps = document.querySelectorAll('.progress-step');
+      
+      // Navigation Buttons
+      const backToCartBtn = document.getElementById('backToCartBtn');
+      const backToShippingBtn = document.getElementById('backToShippingBtn');
+      const continueShopping = document.getElementById('continueShopping');
+      const closeConfirmation = document.getElementById('closeConfirmation');
+      
+      // Forms
+      const shippingForm = document.getElementById('shippingForm');
+      const paymentForm = document.getElementById('paymentForm');
+      
+      // Payment Tabs
+      const paymentTabs = document.querySelectorAll('.payment-tab');
+      const paymentContents = document.querySelectorAll('.payment-content');
+      
+      // Initialize cart from localStorage or empty array
+      let cart = JSON.parse(localStorage.getItem('swooshCart')) || [];
+      
+      // Update cart display on page load
+      updateCart();
+      
+      // Open/Close Cart Functions
+      const openCart = () => {
+        cartSidebar.classList.remove('translate-x-full');
+        cartOverlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      };
+      
+      const closeCartFunc = () => {
+        cartSidebar.classList.add('translate-x-full');
+        cartOverlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+      
+      // Event Listeners
+      if (cartButton) cartButton.addEventListener('click', openCart);
+      if (mobileCartButton) mobileCartButton.addEventListener('click', openCart);
+      if (closeCart) closeCart.addEventListener('click', closeCartFunc);
+      if (cartOverlay) cartOverlay.addEventListener('click', closeCartFunc);
+      
+      // Checkout Flow Navigation
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+          if (cart.length === 0) return;
+          
+          // Show checkout progress
+          checkoutProgress.classList.remove('hidden');
+          
+          // Update active step
+          setActiveStep('shipping');
+        });
+      }
+      
+      if (backToCartBtn) {
+        backToCartBtn.addEventListener('click', function() {
+          setActiveStep('cart');
+        });
+      }
+      
+      if (backToShippingBtn) {
+        backToShippingBtn.addEventListener('click', function() {
+          setActiveStep('shipping');
+        });
+      }
+      
+      if (continueShopping) {
+        continueShopping.addEventListener('click', function() {
+          resetCheckout();
+          closeCartFunc();
+        });
+      }
+      
+      if (closeConfirmation) {
+        closeConfirmation.addEventListener('click', function() {
+          resetCheckout();
+          closeCartFunc();
+        });
+      }
+      
+      if (continueShoppingBtn) {
+        continueShoppingBtn.addEventListener('click', closeCartFunc);
+      }
+      
+      // Set active checkout step
+      function setActiveStep(step) {
+        // Hide all steps
+        cartStep.classList.remove('active');
+        shippingStep.classList.remove('active');
+        paymentStep.classList.remove('active');
+        confirmationStep.classList.remove('active');
         
-        // Get product data from button attributes
-        const id = this.getAttribute('data-id');
-        const name = this.getAttribute('data-name');
-        const price = parseFloat(this.getAttribute('data-price'));
-        
-        // Check if item already in cart
-        const existingItem = cart.find(item => item.id === id);
-        
-        if (existingItem) {
-          existingItem.quantity += 1;
-        } else {
-          cart.push({ id, name, price, quantity: 1 });
+        // Show selected step
+        if (step === 'cart') {
+          cartStep.classList.add('active');
+          cartStepTitle.textContent = 'Your Cart';
+          checkoutProgress.classList.add('hidden');
+        } else if (step === 'shipping') {
+          shippingStep.classList.add('active');
+          cartStepTitle.textContent = 'Shipping';
+          updateShippingSummary();
+        } else if (step === 'payment') {
+          paymentStep.classList.add('active');
+          cartStepTitle.textContent = 'Payment';
+          updatePaymentSummary();
+        } else if (step === 'confirmation') {
+          confirmationStep.classList.add('active');
+          cartStepTitle.textContent = 'Order Complete';
         }
         
-        // Save cart to localStorage
-        localStorage.setItem('swooshCart', JSON.stringify(cart));
+        // Update progress steps
+        progressSteps.forEach(progressStep => {
+          const stepName = progressStep.getAttribute('data-step');
+          progressStep.classList.remove('active', 'completed');
+          
+          if (stepName === step) {
+            progressStep.classList.add('active');
+          } else if (
+            (step === 'shipping' && stepName === 'cart') ||
+            (step === 'payment' && (stepName === 'cart' || stepName === 'shipping')) ||
+            (step === 'confirmation' && (stepName === 'cart' || stepName === 'shipping' || stepName === 'payment'))
+          ) {
+            progressStep.classList.add('completed');
+            progressStep.innerHTML = '<i class="fas fa-check"></i>';
+          } else {
+            progressStep.textContent = stepName === 'cart' ? '1' : stepName === 'shipping' ? '2' : stepName === 'payment' ? '3' : '4';
+          }
+        });
+      }
+      
+      // Reset checkout to cart step
+      function resetCheckout() {
+        setActiveStep('cart');
         
-        updateCart();
-        openCart();
+        // Reset forms
+        if (shippingForm) shippingForm.reset();
+        if (paymentForm) paymentForm.reset();
         
-        // Show added notification
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in z-50';
-        notification.textContent = `${name} added to cart!`;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-          notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
-          setTimeout(() => notification.remove(), 300);
-        }, 2000);
+        // Reset payment tabs
+        if (paymentTabs.length > 0) paymentTabs[0].click();
+      }
+      
+      // Shipping Form Submission
+      if (shippingForm) {
+        shippingForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Collect shipping information
+          const shippingInfo = {
+            fullName: document.getElementById('fullName').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            zipCode: document.getElementById('zipCode').value,
+            country: document.getElementById('country').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            shippingMethod: document.querySelector('input[name="shippingMethod"]:checked').value
+          };
+          
+          // Store shipping info in localStorage
+          localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
+          
+          // Go to payment step
+          setActiveStep('payment');
+        });
+      }
+      
+      // Payment Form Submission
+      if (paymentForm) {
+        paymentForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // In a real app, you would process payment here
+          
+          // Generate order number
+          const orderNumber = 'NKE' + Math.floor(Math.random() * 10000000);
+          
+          // Get shipping info
+          const shippingInfo = JSON.parse(localStorage.getItem('shippingInfo')) || {};
+          
+          // Update confirmation view
+          document.getElementById('orderNumber').textContent = 'Order #' + orderNumber;
+          document.getElementById('orderDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          
+          const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+          const shipping = shippingInfo.shippingMethod === 'express' ? 15 : 5;
+          const tax = subtotal * 0.1; // 10% tax
+          const total = subtotal + shipping + tax;
+          
+          document.getElementById('confirmationSubtotal').textContent = '$' + subtotal.toFixed(2);
+          document.getElementById('confirmationShipping').textContent = '$' + shipping.toFixed(2);
+          document.getElementById('confirmationTax').textContent = '$' + tax.toFixed(2);
+          document.getElementById('confirmationTotal').textContent = '$' + total.toFixed(2);
+          
+          // Set shipping address
+          document.getElementById('confirmationAddress').innerHTML = `
+            ${shippingInfo.fullName}<br>
+            ${shippingInfo.address}<br>
+            ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}<br>
+            ${shippingInfo.country}
+          `;
+          
+          // Set shipping method
+          document.getElementById('confirmationShippingMethod').textContent = 
+            shippingInfo.shippingMethod === 'express' ? 'Express Shipping' : 'Standard Shipping';
+          
+          // Set confirmation email
+          document.getElementById('confirmationEmail').textContent = 
+            `A confirmation email has been sent to ${shippingInfo.email}`;
+          
+          // Go to confirmation step
+          setActiveStep('confirmation');
+          
+          // Clear cart after successful order
+          setTimeout(() => {
+            cart = [];
+            localStorage.setItem('swooshCart', JSON.stringify(cart));
+            updateCart();
+          }, 1000);
+        });
+      }
+      
+      // Payment Tab Switching
+      paymentTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Remove active class from all tabs
+          paymentTabs.forEach(t => t.classList.remove('active'));
+          
+          // Add active class to clicked tab
+          this.classList.add('active');
+          
+          // Hide all content
+          paymentContents.forEach(content => content.classList.add('hidden'));
+          
+          // Show selected content
+          const tabName = this.getAttribute('data-tab');
+          document.getElementById(tabName + 'Tab').classList.remove('hidden');
+        });
       });
-    });
-    
-    // Update Cart Display
-    function updateCart() {
-      // Update count
-      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-      cartCount.textContent = totalItems;
-      mobileCartCount.textContent = totalItems;
       
-      // Update items list
-      if (cart.length === 0) {
-        cartItems.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 empty-cart-message">Your cart is empty</p>';
-        cartTotal.textContent = '$0.00';
-        return;
-      }
-      
-      // Remove empty cart message if it exists
-      const emptyMessage = cartItems.querySelector('.empty-cart-message');
-      if (emptyMessage) {
-        emptyMessage.remove();
-      }
-      
-      // Clear existing items
-      cartItems.innerHTML = '';
-      
-      // Add each cart item
-      cart.forEach(item => {
-        const itemElement = document.createElement('div');
-        itemElement.className = 'flex justify-between items-center border-b dark:border-gray-700 pb-3 mb-3';
-        itemElement.innerHTML = `
-          <div>
-            <h5 class="font-medium">${item.name}</h5>
-            <div class="text-gray-500 dark:text-gray-400 text-sm flex items-center">
-              <span>$${item.price.toFixed(2)} × </span>
-              <div class="inline-flex items-center ml-1 border border-gray-300 dark:border-gray-600 rounded">
-                <button class="decrease-item px-2 py-0.5 hover:bg-gray-100 dark:hover:bg-gray-700" data-id="${item.id}">-</button>
-                <span class="px-2">${item.quantity}</span>
-                <button class="increase-item px-2 py-0.5 hover:bg-gray-100 dark:hover:bg-gray-700" data-id="${item.id}">+</button>
+      // Update Cart Display
+      function updateCart() {
+        if (!cartCount || !mobileCartCount || !cartItems) return;
+        
+        // Update count
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+        mobileCartCount.textContent = totalItems;
+        
+        // Update items list
+        if (cart.length === 0) {
+          cartItems.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 empty-cart-message">Your cart is empty</p>';
+          if (cartTotal) cartTotal.textContent = '$0.00';
+          if (cartSubtotal) cartSubtotal.textContent = '$0.00';
+          if (cartSummary) cartSummary.classList.add('hidden');
+          return;
+        }
+        
+        // Show cart summary
+        if (cartSummary) cartSummary.classList.remove('hidden');
+        
+        // Remove empty cart message if it exists
+        const emptyMessage = cartItems.querySelector('.empty-cart-message');
+        if (emptyMessage) {
+          emptyMessage.remove();
+        }
+        
+        // Clear existing items
+        cartItems.innerHTML = '';
+        
+        // Add each cart item
+        cart.forEach(item => {
+          const itemElement = document.createElement('div');
+          itemElement.className = 'flex gap-4 py-3 border-b dark:border-gray-700';
+          itemElement.innerHTML = `
+            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded flex items-center justify-center overflow-hidden flex-shrink-0">
+              ${item.image ? 
+                `<img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain">` : 
+                `<i class="fas fa-shopping-bag text-gray-400 text-xl"></i>`
+              }
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium">${item.name}</h4>
+              <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">$${item.price.toFixed(2)}</div>
+              <div class="flex items-center justify-between mt-2">
+                <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded">
+                  <button class="decrease-item px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50" data-id="${item.id}" ${item.quantity <= 1 ? 'disabled' : ''}>
+                    <i class="fas fa-minus text-xs"></i>
+                  </button>
+                  <span class="px-2">${item.quantity}</span>
+                  <button class="increase-item px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700" data-id="${item.id}">
+                    <i class="fas fa-plus text-xs"></i>
+                  </button>
+                </div>
+                <button class="remove-item text-red-500 hover:text-red-700" data-id="${item.id}">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
             </div>
-          </div>
-          <div class="flex items-center">
-            <span class="font-medium mr-4">$${(item.price * item.quantity).toFixed(2)}</span>
-            <button class="remove-item text-red-500 hover:text-red-700" data-id="${item.id}">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        `;
+          `;
+          
+          cartItems.appendChild(itemElement);
+        });
         
-        cartItems.appendChild(itemElement);
-      });
-      
-      // Update total
-      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      cartTotal.textContent = `$${total.toFixed(2)}`;
+        // Update total
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        if (cartTotal) cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+        if (cartSubtotal) cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+        
+        // Add event listeners to cart item buttons
+        addCartItemEventListeners();
+      }
       
       // Add event listeners to cart item buttons
-      addCartItemEventListeners();
-    }
-
-    function addCartItemEventListeners() {
-      // Remove item buttons
-      document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          cart = cart.filter(item => item.id !== id);
-          localStorage.setItem('swooshCart', JSON.stringify(cart));
-          updateCart();
+      function addCartItemEventListeners() {
+        // Remove item buttons
+        document.querySelectorAll('.remove-item').forEach(button => {
+          button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('swooshCart', JSON.stringify(cart));
+            updateCart();
+          });
         });
+        
+        // Decrease quantity buttons
+        document.querySelectorAll('.decrease-item').forEach(button => {
+          button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const item = cart.find(item => item.id === id);
+            
+            if (item.quantity > 1) {
+              item.quantity -= 1;
+            } else {
+              cart = cart.filter(item => item.id !== id);
+            }
+            
+            localStorage.setItem('swooshCart', JSON.stringify(cart));
+            updateCart();
+          });
+        });
+        
+        // Increase quantity buttons
+        document.querySelectorAll('.increase-item').forEach(button => {
+          button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const item = cart.find(item => item.id === id);
+            
+            item.quantity += 1;
+            localStorage.setItem('swooshCart', JSON.stringify(cart));
+            updateCart();
+          });
+        });
+      }
+      
+      // Update shipping summary
+      function updateShippingSummary() {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = document.getElementById('standardShipping').checked ? 5 : 15;
+        const tax = subtotal * 0.1; // 10% tax
+        const total = subtotal + shipping + tax;
+        
+        document.getElementById('shippingSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('shippingCost').textContent = `$${shipping.toFixed(2)}`;
+        document.getElementById('shippingTax').textContent = `$${tax.toFixed(2)}`;
+        document.getElementById('shippingTotal').textContent = `$${total.toFixed(2)}`;
+      }
+      
+      // Update payment summary
+      function updatePaymentSummary() {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shippingInfo = JSON.parse(localStorage.getItem('shippingInfo')) || {};
+        const shipping = shippingInfo.shippingMethod === 'express' ? 15 : 5;
+        const tax = subtotal * 0.1; // 10% tax
+        const total = subtotal + shipping + tax;
+        
+        document.getElementById('paymentSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('paymentShipping').textContent = `$${shipping.toFixed(2)}`;
+        document.getElementById('paymentTax').textContent = `$${tax.toFixed(2)}`;
+        document.getElementById('paymentTotal').textContent = `$${total.toFixed(2)}`;
+        
+        // Update order items list
+        const paymentItemsList = document.getElementById('paymentItemsList');
+        paymentItemsList.innerHTML = '';
+        
+        cart.forEach(item => {
+          const itemElement = document.createElement('div');
+          itemElement.className = 'flex justify-between';
+          itemElement.innerHTML = `
+            <span>${item.quantity} × ${item.name}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+          `;
+          paymentItemsList.appendChild(itemElement);
+        });
+      }
+      
+      // Update shipping cost when shipping method changes
+      document.querySelectorAll('input[name="shippingMethod"]').forEach(input => {
+        input.addEventListener('change', updateShippingSummary);
       });
       
-      // Decrease quantity buttons
-      document.querySelectorAll('.decrease-item').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          const item = cart.find(item => item.id === id);
+      // Add to Cart Functionality for product buttons
+      document.querySelectorAll('.product-add').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation(); // Prevent triggering parent card click
           
-          if (item.quantity > 1) {
-            item.quantity -= 1;
+          // Get product data from button attributes
+          const id = this.getAttribute('data-id');
+          const name = this.getAttribute('data-name');
+          const price = parseFloat(this.getAttribute('data-price'));
+          const image = this.getAttribute('data-image') || '';
+          
+          // Check if item already in cart
+          const existingItem = cart.find(item => item.id === id);
+          
+          if (existingItem) {
+            existingItem.quantity += 1;
           } else {
-            cart = cart.filter(item => item.id !== id);
+            cart.push({ id, name, price, quantity: 1, image });
           }
           
+          // Save cart to localStorage
           localStorage.setItem('swooshCart', JSON.stringify(cart));
-          updateCart();
-        });
-      });
-      
-      // Increase quantity buttons
-      document.querySelectorAll('.increase-item').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          const item = cart.find(item => item.id === id);
           
-          item.quantity += 1;
-          localStorage.setItem('swooshCart', JSON.stringify(cart));
           updateCart();
+          openCart();
+          
+          // Show added notification
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-20 right-6 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in z-50';
+          notification.textContent = `${name} added to cart!`;
+          document.body.appendChild(notification);
+          
+          setTimeout(() => {
+            notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+            setTimeout(() => notification.remove(), 300);
+          }, 2000);
         });
       });
-    }
+    });
     
     // Back to Top Button
     const backToTopButton = document.getElementById('backToTop');
